@@ -9,11 +9,11 @@ namespace MiniRPG.Classes
     public class Player
     {
         public string Name { get; set; }
-        public int HP { get; set; }
-        public int MaxHP { get; set; }
-        public float Gold { get; set; }
-        public int Level { get; set; }
-        public int XP { get; set; }
+        public int HP { get; private set; }
+        public int MaxHP { get; private set; }
+        public int Gold { get; private set; }
+        public int Level { get; private set; }
+        public int XP { get; private set; }
 
         public Player( string name)
         {
@@ -25,7 +25,25 @@ namespace MiniRPG.Classes
             XP = 0;
         }
 
-        public void printStats()
+        public void TakeDamage(int damage)
+        {
+           if(damage < 0)
+            {
+                throw new ArgumentException("Damage cannot be negative.");
+            }
+           else
+            {
+               HP -= damage;
+                if (HP < 0) HP = 0;
+            }
+        }
+
+        public void Heal()
+        {
+            HP = MaxHP;
+        }
+
+        public void PrintStats()
         {
             Console.WriteLine($"Name: {Name}");
             Console.WriteLine($"HP: {HP}/{MaxHP}");
