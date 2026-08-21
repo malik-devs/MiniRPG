@@ -37,6 +37,7 @@ namespace MiniRPG.Classes
             Console.WriteLine($"Gold: {Gold}");
             Console.WriteLine($"Level: {Level}");
             Console.WriteLine($"XP: {XP}/{XpMax}");
+            Console.WriteLine();
         }
 
         public void ReceiveReward(int xpReward, int goldReward)

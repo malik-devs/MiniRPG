@@ -48,9 +48,6 @@ namespace MiniRPG.Classes
         public void Attack(Character target)
         {
             target.TakeDamage(Damage);
-            if (target.IsDead) {
-                Console.WriteLine($"{target.Name} defeated");
-            }
         }
 
        

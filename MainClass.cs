@@ -11,40 +11,21 @@ namespace MiniRPG
     {
         static void OnLevelUp(object? sender, LevelUpEventArgs e)
         {
-            Console.WriteLine($"!*!*! Level UP! Level{e.OldLevel} --> Level{e.NewLevel}  !*!*!");
+            Console.WriteLine($"!*!*! Level UP! Level{e.OldLevel} --> Level{e.NewLevel}  !*!*!\n");
         }
         public static void Main(string[] args)
         {
            Player player = new Player("Hero");
             player.PrintStats();
-            Console.WriteLine();
 
             player.LevelUpEvent += OnLevelUp;
 
             Enemy goblin = new Enemy("Goblin", 40, 10, 270, 15);
 
-            player.Attack(goblin);
-            Console.WriteLine(goblin.HP);
-            goblin.Attack(player);
-            Console.WriteLine(player.HP);
-
-            player.Attack(goblin);
-            Console.WriteLine(goblin.HP);
-            goblin.Attack(player);
-            Console.WriteLine(player.HP);
+            CombatSystem combat = new CombatSystem();
+            combat.StartBattle(player, goblin);
 
             
-            player.Attack(goblin);
-            Console.WriteLine(goblin.HP);
-            if(!goblin.IsDead)
-            {
-                goblin.Attack(player);
-                Console.WriteLine(player.HP);
-            }
-
-            player.ReceiveReward(goblin.XPReward, goblin.GoldReward);
-
-            player.PrintStats();
         }
     }
 }
