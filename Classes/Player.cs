@@ -14,6 +14,9 @@ namespace MiniRPG.Classes
         public int XP { get; private set; }
         public int XpMax { get; private set; }
 
+        public event EventHandler<LevelUpEventArgs> LevelUpEvent;
+
+
         public Player(string name):base(name,100,15)
         {
             Gold = 50;
@@ -50,9 +53,10 @@ namespace MiniRPG.Classes
                 XP -= XpMax;
                 Level++;
                 XpMax += 50;
+
+                LevelUpEvent?.Invoke(this, new LevelUpEventArgs(Level,Level-1));
             }
         }
-
 
 
     }

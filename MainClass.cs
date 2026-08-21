@@ -9,11 +9,17 @@ namespace MiniRPG
 {
     public class MainClass
     {
+        static void OnLevelUp(object? sender, LevelUpEventArgs e)
+        {
+            Console.WriteLine($"!*!*! Level UP! Level{e.OldLevel} --> Level{e.NewLevel}  !*!*!");
+        }
         public static void Main(string[] args)
         {
            Player player = new Player("Hero");
             player.PrintStats();
             Console.WriteLine();
+
+            player.LevelUpEvent += OnLevelUp;
 
             Enemy goblin = new Enemy("Goblin", 40, 10, 270, 15);
 
