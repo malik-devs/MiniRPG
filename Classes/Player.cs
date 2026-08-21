@@ -14,6 +14,8 @@ namespace MiniRPG.Classes
         public int XP { get; private set; }
         public int XpMax { get; private set; }
 
+        public Inventory inventory { get; private set; } = new Inventory();
+
         public event EventHandler<LevelUpEventArgs> LevelUpEvent;
 
 

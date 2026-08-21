@@ -13,17 +13,24 @@ namespace MiniRPG
         {
             Console.WriteLine($"!*!*! Level UP! Level{e.OldLevel} --> Level{e.NewLevel}  !*!*!\n");
         }
+
         public static void Main(string[] args)
         {
            Player player = new Player("Hero");
-            player.PrintStats();
 
-            player.LevelUpEvent += OnLevelUp;
+            Item potion = new Item("Health Potion",20, "Restores the player's HP.");
 
-            Enemy goblin = new Enemy("Goblin", 40, 10, 270, 15);
+            player.inventory.AddItem(potion);
+            player.inventory.PrintItems();
 
-            CombatSystem combat = new CombatSystem();
-            combat.StartBattle(player, goblin);
+            //player.PrintStats();
+
+            //player.LevelUpEvent += OnLevelUp;
+
+            //Enemy goblin = new Enemy("Goblin", 40, 10, 270, 15);
+
+            //CombatSystem combat = new CombatSystem();
+            //combat.StartBattle(player, goblin);
 
             
         }
