@@ -6,36 +6,18 @@ using System.Threading.Tasks;
 
 namespace MiniRPG.Classes
 {
-    public class Player
+    public class Player : Character
     {
-        public string Name { get; set; }
-        public int HP { get; private set; }
-        public int MaxHP { get; private set; }
+
         public int Gold { get; private set; }
         public int Level { get; private set; }
         public int XP { get; private set; }
 
-        public Player( string name)
+        public Player(string name):base(name,100,15)
         {
-            Name = name;
-            HP = 100;
-            MaxHP = 100;
             Gold = 50;
             Level = 1;
             XP = 0;
-        }
-
-        public void TakeDamage(int damage)
-        {
-           if(damage < 0)
-            {
-                throw new ArgumentException("Damage cannot be negative.");
-            }
-           else
-            {
-               HP -= damage;
-                if (HP < 0) HP = 0;
-            }
         }
 
         public void Heal()
