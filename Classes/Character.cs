@@ -14,6 +14,14 @@ namespace MiniRPG.Classes
 
         public int Damage { get; protected set; }
 
+        public bool IsDead
+        {
+            get
+            {
+                return HP <= 0;
+            }
+        }
+
         protected Character(string name, int maxHP, int damage)
         {
             Name = name;
@@ -40,6 +48,11 @@ namespace MiniRPG.Classes
         public void Attack(Character target)
         {
             target.TakeDamage(Damage);
+            if (target.IsDead) {
+                Console.WriteLine($"{target.Name} defeated");
+            }
         }
+
+       
     }
 }

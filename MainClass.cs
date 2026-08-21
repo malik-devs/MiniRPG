@@ -13,11 +13,32 @@ namespace MiniRPG
         {
            Player player = new Player("Hero");
             player.PrintStats();
-            Enemy goblin = new Enemy("Goblin", 40, 10, 0, 0);
+            Console.WriteLine();
+
+            Enemy goblin = new Enemy("Goblin", 40, 10, 270, 15);
+
             player.Attack(goblin);
             Console.WriteLine(goblin.HP);
             goblin.Attack(player);
             Console.WriteLine(player.HP);
+
+            player.Attack(goblin);
+            Console.WriteLine(goblin.HP);
+            goblin.Attack(player);
+            Console.WriteLine(player.HP);
+
+            
+            player.Attack(goblin);
+            Console.WriteLine(goblin.HP);
+            if(!goblin.IsDead)
+            {
+                goblin.Attack(player);
+                Console.WriteLine(player.HP);
+            }
+
+            player.ReceiveReward(goblin.XPReward, goblin.GoldReward);
+
+            player.PrintStats();
         }
     }
 }
