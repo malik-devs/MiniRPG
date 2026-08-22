@@ -16,23 +16,49 @@ namespace MiniRPG
 
         public static void Main(string[] args)
         {
-           Player player = new Player("Hero");
+            Player player = new Player("Hero");
+            player.LevelUpEvent += OnLevelUp;
 
-            Item potion = new Item("Health Potion",20, "Restores the player's HP.");
+            Console.WriteLine("==========Player==========");
+            player.PrintStats();
 
-            player.inventory.AddItem(potion);
-            player.inventory.PrintItems();
+            Enemy goblin = new Enemy("goblin", 10, 25, 270, 100);
 
-            //player.PrintStats();
+            Console.WriteLine("==========Battle==========");
+            CombatSystem combat = new CombatSystem();
+            combat.StartBattle(player, goblin);
 
-            //player.LevelUpEvent += OnLevelUp;
+            HealthPotion potion = new HealthPotion("Health Potion", 20, "Restores 30 HP", 30);
 
-            //Enemy goblin = new Enemy("Goblin", 40, 10, 270, 15);
+            player.Inventory.AddItem(potion);
+            player.Inventory.AddItem(potion);
 
-            //CombatSystem combat = new CombatSystem();
-            //combat.StartBattle(player, goblin);
+
+            player.Inventory.PrintItems();
+
+            Console.WriteLine("\n=== TEST POTION 1 ===");
+
+            player.TakeDamage(60);
+
+            Console.WriteLine($"HP before potion: {player.HP}");
+
+            player.Inventory.UseItem(potion, player);
+
+            Console.WriteLine($"HP after potion: {player.HP}");
+
+            Console.WriteLine("\n=== INVENTORY AFTER USE ===");
+
+            player.Inventory.PrintItems();
+
+            Console.WriteLine("\n=== FINAL PLAYER ===");
+
+            player.PrintStats();
 
             
+
+
+
+
         }
     }
 }

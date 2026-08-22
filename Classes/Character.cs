@@ -50,6 +50,21 @@ namespace MiniRPG.Classes
             target.TakeDamage(Damage);
         }
 
+        public void Heal(int amount)
+        {
+            if (amount < 0)
+            {
+                throw new ArgumentException("Heal cannot be negative.");
+            }
+
+            HP += amount;
+
+            if(HP > MaxHP)
+            {
+                HP = MaxHP;
+            }
+        }
+
        
     }
 }

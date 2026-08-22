@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MiniRPG.Classes
 {
-    public class Item
+    public abstract class Item
     { 
         public string Name { get; private set; }
         public int Price { get; private set; }
@@ -18,5 +18,8 @@ namespace MiniRPG.Classes
             Price = price;
             Description = description;
         }
+
+        public abstract void Use(Player player);
+
     }
 }

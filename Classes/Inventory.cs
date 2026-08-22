@@ -39,5 +39,18 @@ namespace MiniRPG.Classes
                 );
             }
         }
+
+        public void UseItem(Item item, Player player)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+            if (items.Contains(item))
+            {
+                item.Use(player);
+                items.Remove(item);
+            }
+        }
     }
 }
