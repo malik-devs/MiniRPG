@@ -61,6 +61,20 @@ namespace MiniRPG.Classes
             }
         }
 
+        public bool SpendGold(int amount)
+        {
+            if (amount < 0) throw new ArgumentException("Amount cannot be negative");
+            if (Gold >= amount)
+            {
+                Gold -= amount;
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Not enough Gold.");
+                return false;
+            }
+        }
 
     }
 }

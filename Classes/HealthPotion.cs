@@ -18,5 +18,10 @@ namespace MiniRPG.Classes
         {
             player.Heal(HealAmount);
         }
+
+        public override Item Clone()
+        {
+            return new HealthPotion(Name,Price,Description,HealAmount);
+        }
     }
 }

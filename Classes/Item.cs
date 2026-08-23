@@ -21,5 +21,7 @@ namespace MiniRPG.Classes
 
         public abstract void Use(Player player);
 
+        public abstract Item Clone();
+
     }
 }

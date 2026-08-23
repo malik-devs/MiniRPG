@@ -1,0 +1,75 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MiniRPG.Classes
+{
+    public class Shop 
+    {
+        private List<Item> items = new List<Item>();
+        public int Count => items.Count;
+
+        public void AddItem(Item item)
+        {
+            if (item != null)
+                items.Add(item);
+        }
+
+        public void RemoveItem(Item item)
+        {
+            if (item != null)
+                items.Remove(item);
+        }
+
+
+
+        public void PrintItems()
+        {
+            if (items.Count == 0)
+            {
+                Console.WriteLine("Shop is empty..");
+                return;
+            }
+            int count = 1;
+            
+            foreach (Item item in items)
+            {
+                Console.WriteLine(
+                    $"{count}. {item.Name}\n" +
+                    $"Price: {item.Price}\n" +
+                    $"Description: {item.Description}\n\n"
+                );
+                count++;
+            }
+        }
+        
+        public Item? GetItem(int index)
+        {
+            if(index <= 0 || index > items.Count) return null;
+            return items[index-1];
+        }
+
+        public bool BuyItem(Player player, Item item)
+        {
+            if (!items.Contains(item))
+            {
+                Console.WriteLine("Item is not available in the shop.");
+                return false;
+                
+            }
+
+            bool CheckSpendGold = player.SpendGold(item.Price);
+            if (CheckSpendGold)
+            {
+                player.Inventory.AddItem(item.Clone());
+                return true; 
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}

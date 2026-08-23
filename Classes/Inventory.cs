@@ -24,7 +24,7 @@ namespace MiniRPG.Classes
 
         public void PrintItems()
         {
-            if(items.Count < 0)
+            if(items.Count == 0)
             {
                 Console.WriteLine("Inventory is empty..");
                 return;
