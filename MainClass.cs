@@ -40,10 +40,6 @@ namespace MiniRPG
                     Console.WriteLine("Thank you for shoping....");
                     break;
                 }
-                else if (choice < 0 || choice > shop.Count)
-                {
-                    Console.WriteLine("Invalid choice");
-                }
                 else
                 {
                     Item? item = shop.GetItem(choice);
@@ -52,10 +48,20 @@ namespace MiniRPG
                         Console.WriteLine("Invalid choice.");
                         continue;
                     }
-                    bool bought = shop.BuyItem(player, item);
-                    if (bought)
+                    PurchaseResult result = shop.BuyItem(player, item);
+                    switch (result)
                     {
-                        Console.WriteLine($"You bought {item.Name}!\n");
+                        case PurchaseResult.Success:
+                            Console.WriteLine($"You bought {item.Name}");
+                            break;
+
+                        case PurchaseResult.ItemNotFound:
+                            Console.WriteLine("Item is not available in the shop.");
+                            break;
+
+                        case PurchaseResult.NotEnoughGold:
+                            Console.WriteLine("Not enough Gold.");
+                            break;
                     }
                 }
             }

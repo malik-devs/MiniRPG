@@ -71,7 +71,6 @@ namespace MiniRPG.Classes
             }
             else
             {
-                Console.WriteLine("Not enough Gold.");
                 return false;
             }
         }

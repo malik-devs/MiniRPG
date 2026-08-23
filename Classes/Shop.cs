@@ -51,25 +51,18 @@ namespace MiniRPG.Classes
             return items[index-1];
         }
 
-        public bool BuyItem(Player player, Item item)
+        public PurchaseResult BuyItem(Player player, Item item)
         {
             if (!items.Contains(item))
             {
-                Console.WriteLine("Item is not available in the shop.");
-                return false;
-                
+                return PurchaseResult.ItemNotFound;
             }
-
-            bool CheckSpendGold = player.SpendGold(item.Price);
-            if (CheckSpendGold)
+            if (!player.SpendGold(item.Price))
             {
-                player.Inventory.AddItem(item.Clone());
-                return true; 
+                return PurchaseResult.NotEnoughGold;
             }
-            else
-            {
-                return false;
-            }
+            player.Inventory.AddItem(item.Clone());
+            return PurchaseResult.Success;
         }
     }
 }
