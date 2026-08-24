@@ -1,4 +1,5 @@
 ﻿using MiniRPG.Characters;
+using MiniRPG.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace MiniRPG.Combat
 {
     public class CombatSystem
     {
-        public void StartBattle(Player player, Enemy monster)
+        public BattleResult StartBattle(Player player, Enemy monster)
         {
             while(!player.IsDead && !monster.IsDead)
             {
@@ -19,7 +20,7 @@ namespace MiniRPG.Combat
 
                 if (monster.IsDead)
                 {
-                    Console.WriteLine($"{monster.Name} defeated\n");
+                    break;
                 }
                 else
                 {
@@ -31,9 +32,10 @@ namespace MiniRPG.Combat
             {
                 player.ReceiveReward(monster.XPReward, monster.GoldReward);
                 player.PrintStats();
+                return BattleResult.Win;
             }
             else
-                Console.WriteLine("YOU DEAD");
+                return BattleResult.Dead;
 
         }
         public void PrintHealth(Character character)
