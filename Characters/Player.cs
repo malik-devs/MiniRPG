@@ -1,14 +1,16 @@
-﻿using System;
+﻿using MiniRPG.Equipment;
+using MiniRPG.Events;
+using MiniRPG.Items;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using MiniRPG.Inventories;
 
-namespace MiniRPG.Classes
+namespace MiniRPG.Characters
 {
-    /**
-     * It's a Class who play 
-     **/
     
     public class Player : Character
     {
@@ -51,7 +53,22 @@ namespace MiniRPG.Classes
             Console.WriteLine($"Gold: {Gold}");
             Console.WriteLine($"Level: {Level}");
             Console.WriteLine($"XP: {XP}/{XpMax}");
-            Console.WriteLine();
+            Console.WriteLine($"Base Damage: {Damage}");
+            Console.WriteLine($"Total Damage: {TotalDamage}");
+
+            Console.Write("Weapon: ");
+
+            if (EquippedWeapon != null)
+            {
+                Console.WriteLine(EquippedWeapon.Name);
+                Console.WriteLine($"Weapon Damage: +{EquippedWeapon.Damage}");
+            }
+            else
+            {
+                Console.WriteLine("No Equipped Weapon");
+            }
+
+            Console.WriteLine("==============================");
         }
 
         public void ReceiveReward(int xpReward, int goldReward)
@@ -92,13 +109,13 @@ namespace MiniRPG.Classes
             target.TakeDamage(TotalDamage);
         }
 
-        public EquipResult EquipWeapon(Weapon weapon)
+        public EquipmentResult EquipWeapon(Weapon weapon)
         {
             if(weapon == null) 
                 throw new ArgumentNullException(nameof(weapon));
 
             if (!Inventory.Contains(weapon))
-                return EquipResult.WeaponNotFound;
+                return EquipmentResult.WeaponNotFound;
             
 
             if(EquippedWeapon != null)
@@ -106,8 +123,20 @@ namespace MiniRPG.Classes
             
             EquippedWeapon = weapon;
 
-            return EquipResult.Success;
+            return EquipmentResult.Success;
+        }
+        
+        public EquipmentResult UnequipWeapon()
+        {
+            if (EquippedWeapon == null)
+                return EquipmentResult.NotEquippedWeapon;
+
+            Inventory.AddItem(EquippedWeapon);
+            EquippedWeapon = null;
+            return EquipmentResult.Success;
+
         }
 
+        
     }
 }

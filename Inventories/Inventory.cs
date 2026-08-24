@@ -1,10 +1,13 @@
-﻿using System;
+﻿using MiniRPG.Characters;
+using MiniRPG.Enums;
+using MiniRPG.Items;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniRPG.Classes
+namespace MiniRPG.Inventories
 {
     public class Inventory
     {
@@ -36,22 +39,27 @@ namespace MiniRPG.Classes
             }
             return null;
         }
+        public Item? GetItem(int index)
+        {
+            if (index <= 0 || index > items.Count) return null;
+            return items[index - 1];
+        }
 
         public void PrintItems()
         {
-            if(items.Count == 0)
+            if (items.Count == 0)
             {
                 Console.WriteLine("Inventory is empty..");
                 return;
             }
-
+            int count = 1;
             foreach (Item item in items)
             {
                 Console.WriteLine(
-                    $"Name: {item.Name}\n"+
-                    $"Price: {item.Price}\n"+
-                    $"Description: {item.Description}\n\n"
+                    $"{count}. Name: {item.Name}\n"+
+                    $"   Description: {item.Description}\n"
                 );
+                count++;
             }
         }
 

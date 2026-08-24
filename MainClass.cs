@@ -1,10 +1,14 @@
-﻿using MiniRPG.Classes;
+﻿using MiniRPG.Characters;
+using MiniRPG.Enums;
+using MiniRPG.Events;
+using MiniRPG.Items;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MiniRPG.Shops;
 
 namespace MiniRPG
 {
@@ -70,41 +74,74 @@ namespace MiniRPG
 
 
 
-                Console.WriteLine("After");
-            player.Inventory.PrintItems();
-            player.PrintStats();
+            //    Console.WriteLine("After");
+            //player.Inventory.PrintItems();
+            //player.PrintStats();
 
 
-            Item? sword = player.Inventory.FindItem("Iron Sword");
+            //Item? sword = player.Inventory.FindItem("Iron Sword");
 
-            if (sword != null)
+            //if (sword != null)
+            //{
+            //    ItemUseResult result = player.Inventory.UseItem(sword, player);
+
+            //    if (result == ItemUseResult.Success)
+            //    {
+            //        Console.WriteLine("Sword equipped!");
+            //    }
+            //}
+
+            //Console.WriteLine($"Base Damage: {player.Damage}\n"+$"Total Damage: {player.TotalDamage}\n");
+            //player.Inventory.PrintItems();
+
+            //sword = player.Inventory.FindItem("Steel Sword");
+
+            //if (sword != null)
+            //{
+            //    ItemUseResult result = player.Inventory.UseItem(sword, player);
+
+            //    if (result == ItemUseResult.Success)
+            //    {
+            //        Console.WriteLine("Sword equipped!");
+            //    }
+            //}
+
+            //Console.WriteLine($"Base Damage: {player.Damage}\n" + $"Total Damage: {player.TotalDamage}\n");
+            //player.Inventory.PrintItems();
+
+            
+            
+
+            
+            while (true)
             {
-                ItemUseResult result = player.Inventory.UseItem(sword, player);
-
-                if (result == ItemUseResult.Success)
+                Console.WriteLine("================ INVENTORY ================");
+                player.Inventory.PrintItems();
+                Console.WriteLine("0. Exit\n");
+                Console.WriteLine("Enter your Choice to Use: ");
+                int choice = Convert.ToInt32(Console.ReadLine());
+                if (choice == 0)
+                    break;
+                else
                 {
-                    Console.WriteLine("Sword equipped!");
+                    Item? item = player.Inventory.GetItem(choice);
+                    if (item == null)
+                    {
+                        Console.WriteLine("Invalid choice.");
+                        continue;
+                    }
+                    ItemUseResult result = player.Inventory.UseItem(item, player);
+                    switch (result)
+                    {
+                        case ItemUseResult.Success:
+                            Console.WriteLine($"{item.Name} used seccessfully");
+                            break;
+                        case ItemUseResult.Failed:
+                            Console.WriteLine($"{item.Name} Faild to use");
+                            break;
+                    }
                 }
             }
-
-            Console.WriteLine($"Base Damage: {player.Damage}\n"+$"Total Damage: {player.TotalDamage}\n");
-            player.Inventory.PrintItems();
-
-            sword = player.Inventory.FindItem("Steel Sword");
-
-            if (sword != null)
-            {
-                ItemUseResult result = player.Inventory.UseItem(sword, player);
-
-                if (result == ItemUseResult.Success)
-                {
-                    Console.WriteLine("Sword equipped!");
-                }
-            }
-
-            Console.WriteLine($"Base Damage: {player.Damage}\n" + $"Total Damage: {player.TotalDamage}\n");
-            player.Inventory.PrintItems();
-
         }
     }
 }

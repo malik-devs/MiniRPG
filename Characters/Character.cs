@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniRPG.Classes
+namespace MiniRPG.Characters
 {
     public abstract class Character
     {

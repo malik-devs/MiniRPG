@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniRPG.Classes
+namespace MiniRPG.Equipment
 {
-    public enum PurchaseResult
+    public enum EquipmentResult
     {
-        Success, 
-        ItemNotFound,
-        NotEnoughGold
+        Success,
+        WeaponNotFound,
+        NotEquippedWeapon
     }
+   
 }

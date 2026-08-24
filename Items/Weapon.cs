@@ -1,10 +1,13 @@
-﻿using System;
+﻿using MiniRPG.Characters;
+using MiniRPG.Enums;
+using MiniRPG.Equipment;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniRPG.Classes
+namespace MiniRPG.Items
 {
     public class Weapon : Item
     {
@@ -28,9 +31,9 @@ namespace MiniRPG.Classes
 
         public override ItemUseResult Use(Player player)
         {
-           EquipResult result = player.EquipWeapon( this );
+           EquipmentResult result = player.EquipWeapon( this );
 
-            if (result == EquipResult.Success)
+            if (result == EquipmentResult.Success)
                 return ItemUseResult.Success;
 
             return ItemUseResult.Failed;
