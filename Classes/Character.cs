@@ -45,7 +45,7 @@ namespace MiniRPG.Classes
             
         }
 
-        public void Attack(Character target)
+        public virtual void Attack(Character target)
         {
             target.TakeDamage(Damage);
         }

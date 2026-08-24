@@ -19,7 +19,9 @@ namespace MiniRPG.Classes
             Description = description;
         }
 
-        public abstract void Use(Player player);
+        
+
+        public abstract ItemUseResult Use(Player player);
 
         public abstract Item Clone();
 

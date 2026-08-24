@@ -26,6 +26,8 @@ namespace MiniRPG
             Shop shop = new Shop();
             shop.AddItem(new HealthPotion("Health Potion", 20, "Restores 30 HP", 30));
             shop.AddItem(new HealthPotion("Greater Health Potion", 40, "Restores 60 HP", 60));
+            shop.AddItem(new Weapon("Iron Sword", 50, "A simple iron sword.", 10));
+            shop.AddItem(new Weapon("Steel Sword", 80, "A stronger sword.", 20));
 
             while (true)
             {
@@ -71,7 +73,38 @@ namespace MiniRPG
                 Console.WriteLine("After");
             player.Inventory.PrintItems();
             player.PrintStats();
-           
+
+
+            Item? sword = player.Inventory.FindItem("Iron Sword");
+
+            if (sword != null)
+            {
+                ItemUseResult result = player.Inventory.UseItem(sword, player);
+
+                if (result == ItemUseResult.Success)
+                {
+                    Console.WriteLine("Sword equipped!");
+                }
+            }
+
+            Console.WriteLine($"Base Damage: {player.Damage}\n"+$"Total Damage: {player.TotalDamage}\n");
+            player.Inventory.PrintItems();
+
+            sword = player.Inventory.FindItem("Steel Sword");
+
+            if (sword != null)
+            {
+                ItemUseResult result = player.Inventory.UseItem(sword, player);
+
+                if (result == ItemUseResult.Success)
+                {
+                    Console.WriteLine("Sword equipped!");
+                }
+            }
+
+            Console.WriteLine($"Base Damage: {player.Damage}\n" + $"Total Damage: {player.TotalDamage}\n");
+            player.Inventory.PrintItems();
+
         }
     }
 }

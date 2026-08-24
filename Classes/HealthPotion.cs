@@ -14,9 +14,10 @@ namespace MiniRPG.Classes
             HealAmount = healAmount;
         }
 
-        public override void Use(Player player)
+        public override ItemUseResult Use(Player player)
         {
             player.Heal(HealAmount);
+            return ItemUseResult.Success;
         }
 
         public override Item Clone()

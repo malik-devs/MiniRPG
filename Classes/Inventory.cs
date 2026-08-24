@@ -22,6 +22,21 @@ namespace MiniRPG.Classes
                 items.Remove(item);
         }
 
+        public bool Contains(Item item)
+        {
+            return items.Contains(item);
+        }
+
+        public Item? FindItem(string name)
+        {
+            foreach (Item item in items)
+            {
+                if (item.Name == name)
+                    return item;
+            }
+            return null;
+        }
+
         public void PrintItems()
         {
             if(items.Count == 0)
@@ -40,17 +55,21 @@ namespace MiniRPG.Classes
             }
         }
 
-        public void UseItem(Item item, Player player)
+        public ItemUseResult UseItem(Item item, Player player)
         {
             if (item == null)
-            {
                 throw new ArgumentNullException(nameof(item));
-            }
-            if (items.Contains(item))
-            {
-                item.Use(player);
+
+            if (!items.Contains(item))
+                return ItemUseResult.Failed;
+
+            ItemUseResult result = item.Use(player);
+
+            if (result == ItemUseResult.Success)
                 items.Remove(item);
-            }
+
+            return result;
+
         }
     }
 }
