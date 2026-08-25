@@ -1,4 +1,5 @@
 ﻿using MiniRPG.Characters;
+using MiniRPG.Characters.Enemies;
 using MiniRPG.Enums;
 using System;
 using System.Collections.Generic;

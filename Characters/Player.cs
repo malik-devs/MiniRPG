@@ -76,6 +76,7 @@ namespace MiniRPG.Characters
             Gold += goldReward;
             XP += xpReward;
             LevelUp();
+
         }
 
         public void LevelUp()
@@ -88,6 +89,11 @@ namespace MiniRPG.Characters
 
                 LevelUpEvent?.Invoke(this, new LevelUpEventArgs(Level,Level-1));
             }
+        }
+
+        public bool IsMaxLevel()
+        {
+            return Level > 10;
         }
 
         public bool SpendGold(int amount)

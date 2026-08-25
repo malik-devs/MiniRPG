@@ -9,6 +9,7 @@ namespace MiniRPG.Enums
     public enum BattleResult
     {
         Win,
-        Dead
+        Dead,
+        NoEnemy
     }
 }

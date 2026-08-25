@@ -1,4 +1,5 @@
-﻿using MiniRPG.GameLunch;
+﻿using MiniRPG.Characters.Enemies;
+using MiniRPG.GameLunch;
 
 namespace MiniRPG
 {

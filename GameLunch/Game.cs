@@ -1,4 +1,5 @@
 ﻿using MiniRPG.Characters;
+using MiniRPG.Characters.Enemies;
 using MiniRPG.Combat;
 using MiniRPG.Enums;
 using MiniRPG.Events;
@@ -22,15 +23,24 @@ namespace MiniRPG.GameLunch
                 Console.WriteLine($"Your Player name: {player.Name}\n\n");
                 Shop shop = CreateShop();
                 player.LevelUpEvent += OnLevelUp;
+                EnemyFactory enemyFactory = new EnemyFactory();
 
-                GameResult result = MainMenu(player, shop);
-                if (result != GameResult.Restart)
+
+                GameResult result = MainMenu(player, shop, enemyFactory);
+                if (result == GameResult.Victory)
+                {
+                    Console.WriteLine("\n=====================================");
+                    Console.WriteLine("       🏆 YOU COMPLETED THE GAME!      ");
+                    Console.WriteLine("=====================================\n");
+                    break;
+                }
+                if (result == GameResult.Exit)
                     break;
             }
             
         }
 
-        private GameResult MainMenu(Player player, Shop shop)
+        private GameResult MainMenu(Player player, Shop shop, EnemyFactory enemyFactory)
         {
             while (true)
             {
@@ -63,10 +73,18 @@ namespace MiniRPG.GameLunch
                         PlayerStats(player);
                         break;
                     case 4:
-                        result = Battle(player);
-                        if (result != BattleResult.Win)
-                            return GameOver();
-                        break;
+                        result = Battle(player, enemyFactory);
+                        
+                        if(result == BattleResult.Win)
+                        {
+                            if (player.IsMaxLevel())
+                            {
+                                return GameResult.Victory;
+                            }
+                            break;
+                        }
+                        return GameOver();
+                        
                 }
                 
             }
@@ -167,14 +185,18 @@ namespace MiniRPG.GameLunch
             }
         }
 
-        private BattleResult Battle(Player player)
+        private BattleResult Battle(Player player, EnemyFactory enemyFactory)
         {
-            Enemy goblin = new Enemy("Goblin", 20, 10, 5, 10);
+            Enemy? enemy = enemyFactory.GetEnemy(player.Level);
+
+            if (enemy == null)
+                return BattleResult.NoEnemy;
+
             CombatSystem combat = new CombatSystem();
-            BattleResult result = combat.StartBattle(player, goblin);
+            BattleResult result = combat.StartBattle(player, enemy);
             if (result == BattleResult.Win)
             {
-                Console.WriteLine($"{goblin.Name} defeated\n");
+                Console.WriteLine($"{enemy.Name} defeated\n");
             }
 
             return result;

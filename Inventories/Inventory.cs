@@ -12,7 +12,7 @@ namespace MiniRPG.Inventories
     public class Inventory
     {
         private List<Item> items = new List<Item>();
-        public int Count { get { return items.Count; } }
+        public int Count => items.Count;
         public void AddItem(Item item)
         {
             if(item !=  null)

@@ -9,6 +9,7 @@ namespace MiniRPG.Enums
     public enum GameResult
     {
         Restart,
-        Exit
+        Exit,
+        Victory
     }
 }
