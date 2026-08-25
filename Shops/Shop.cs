@@ -12,7 +12,7 @@ namespace MiniRPG.Shops
     public class Shop 
     {
         private List<Item> items = new List<Item>();
-        public int Count => items.Count;
+        public int Count { get { return items.Count; } }
 
         public void AddItem(Item item)
         {

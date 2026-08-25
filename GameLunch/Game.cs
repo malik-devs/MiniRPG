@@ -1,16 +1,10 @@
 ﻿using MiniRPG.Characters;
 using MiniRPG.Combat;
 using MiniRPG.Enums;
+using MiniRPG.Events;
 using MiniRPG.Items;
 using MiniRPG.Shops;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+
 
 namespace MiniRPG.GameLunch
 {
@@ -18,20 +12,25 @@ namespace MiniRPG.GameLunch
     {
         public void Start()
         {
-            Console.WriteLine("======== Welcome To MiniRPG ========\n\n");
+            while (true)
+            {
+                Console.WriteLine("======== Welcome To MiniRPG ========\n\n");
 
-            Console.WriteLine("Enter a name to your player....");
-            string namePlayer = Console.ReadLine();
-            Player player = new Player(namePlayer);
-            Console.WriteLine($"Your Player name: {player.Name}\n\n");
-            Shop shop = CreateShop();
+                Console.WriteLine("Enter a name to your player....");
+                string playerName = Console.ReadLine();
+                Player player = new Player(playerName);
+                Console.WriteLine($"Your Player name: {player.Name}\n\n");
+                Shop shop = CreateShop();
+                player.LevelUpEvent += OnLevelUp;
 
-            MainMenu(player, shop);
-
-
+                GameResult result = MainMenu(player, shop);
+                if (result != GameResult.Restart)
+                    break;
+            }
+            
         }
 
-        private void MainMenu(Player player, Shop shop)
+        private GameResult MainMenu(Player player, Shop shop)
         {
             while (true)
             {
@@ -47,12 +46,13 @@ namespace MiniRPG.GameLunch
                     );
                 Console.WriteLine("Enter your choice: ");
 
-                int choice = Convert.ToInt32(Console.ReadLine());
+                int choice = ReadChoice(0,4);
+                BattleResult result;
                 switch (choice)
                 {
                     case 0:
                         Console.WriteLine("\n\n============ Good Bye ============\n\n");
-                        return;
+                        return GameResult.Exit;
                     case 1:
                         PrintShop(shop, player);
                         break;
@@ -63,12 +63,12 @@ namespace MiniRPG.GameLunch
                         PlayerStats(player);
                         break;
                     case 4:
-                        Battle(player);
+                        result = Battle(player);
+                        if (result != BattleResult.Win)
+                            return GameOver();
                         break;
-
                 }
-
-
+                
             }
 
         }
@@ -87,13 +87,9 @@ namespace MiniRPG.GameLunch
         private void PlayerStats(Player player)
         {
             player.PrintStats();
-            int choice;
-            do
-            {
-                Console.WriteLine("Enter 0 to back..");
-                choice = Convert.ToInt32(Console.ReadLine());
-            } while (choice != 0);
-
+            Console.WriteLine("Enter 0 to back..");
+            ReadChoice(0,0);
+            
         }
 
         private void PrintShop(Shop shop, Player player)
@@ -105,7 +101,7 @@ namespace MiniRPG.GameLunch
                 Console.WriteLine("0. Exit\n");
                 Console.WriteLine($"Gold: {player.Gold}\n");
                 Console.WriteLine("Enter Your Choice...");
-                int choice = Convert.ToInt32(Console.ReadLine());
+                int choice = ReadChoice(0,shop.Count);
                 if (choice == 0)
                 {
                     Console.WriteLine("Thank you for shoping....");
@@ -146,7 +142,7 @@ namespace MiniRPG.GameLunch
                 player.Inventory.PrintItems();
                 Console.WriteLine("0. Exit\n");
                 Console.WriteLine("Enter your Choice to Use: ");
-                int choice = Convert.ToInt32(Console.ReadLine());
+                int choice = ReadChoice(0,player.Inventory.Count);
                 if (choice == 0)
                     break;
                 else
@@ -171,22 +167,52 @@ namespace MiniRPG.GameLunch
             }
         }
 
-        private void Battle(Player player)
+        private BattleResult Battle(Player player)
         {
-            Enemy Goblin = new Enemy("Goblin", 20, 5, 5, 10);
+            Enemy goblin = new Enemy("Goblin", 20, 10, 5, 10);
             CombatSystem combat = new CombatSystem();
-            BattleResult result = combat.StartBattle(player, Goblin);
-            switch (result)
+            BattleResult result = combat.StartBattle(player, goblin);
+            if (result == BattleResult.Win)
             {
-                case BattleResult.Win:
-                    Console.WriteLine($"{Goblin.Name} defeated\n");
-                    break;
-                case BattleResult.Dead:
-                    Console.WriteLine("YOU DEAD");
-                    break;
+                Console.WriteLine($"{goblin.Name} defeated\n");
             }
 
+            return result;
 
         }
+
+        private void OnLevelUp(object? sender, LevelUpEventArgs e)
+        {
+            Console.WriteLine($"!*!*! Level UP! Level{e.OldLevel} --> Level{e.NewLevel}  !*!*!\n");
+        }
+
+        private int ReadChoice(int min, int max)
+        {
+            while (true)
+            {
+                string? input = Console.ReadLine();
+
+                if (int.TryParse(input, out int choice) && choice >= min && choice <= max)
+                {
+                    return choice;
+                }
+
+                Console.WriteLine($"Please enter a valid number, between {min} and {max}.");
+            }
+        }
+
+        private GameResult GameOver()
+        {
+            Console.WriteLine("============ GAME OVER ============\n");
+            Console.WriteLine("1. Restart Game ");
+            Console.WriteLine("0. Exit \n");
+
+            int choice = ReadChoice(0,1);
+
+            if(choice == 0)
+                return GameResult.Exit;
+            return GameResult.Restart;
+        }
+
     }
 }

@@ -12,7 +12,7 @@ namespace MiniRPG.Inventories
     public class Inventory
     {
         private List<Item> items = new List<Item>();
-
+        public int Count { get { return items.Count; } }
         public void AddItem(Item item)
         {
             if(item !=  null)
@@ -29,6 +29,8 @@ namespace MiniRPG.Inventories
         {
             return items.Contains(item);
         }
+
+        
 
         public Item? FindItem(string name)
         {

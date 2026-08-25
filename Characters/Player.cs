@@ -35,7 +35,7 @@ namespace MiniRPG.Characters
         //Methods
         public Player(string name):base(name,100,15)
         {
-            Gold = 500;
+            Gold = 20;
             Level = 1;
             XP = 0;
             XpMax = 100;
