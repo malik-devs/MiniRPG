@@ -1,13 +1,8 @@
 ﻿using MiniRPG.Equipment;
 using MiniRPG.Events;
 using MiniRPG.Items;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using MiniRPG.Inventories;
+using MiniRPG.UI;
 
 namespace MiniRPG.Characters
 {
@@ -48,20 +43,23 @@ namespace MiniRPG.Characters
 
         public void PrintStats()
         {
-            Console.WriteLine($"Name: {Name}");
-            Console.WriteLine($"HP: {HP}/{MaxHP}");
-            Console.WriteLine($"Gold: {Gold}");
-            Console.WriteLine($"Level: {Level}");
-            Console.WriteLine($"XP: {XP}/{XpMax}");
-            Console.WriteLine($"Base Damage: {Damage}");
-            Console.WriteLine($"Total Damage: {TotalDamage}");
+            Console.WriteLine($"Name: {Name}\n");
+            Console.WriteLine($"{ConsoleUI.PrintBar("HP",HP,MaxHP)}\n");
+            Console.WriteLine($"Gold: {Gold}\n");
+            Console.WriteLine($"Level: {Level}\n");
+            Console.WriteLine($"{ConsoleUI.PrintBar("XP", XP, XpMax)}\n");
+            Console.WriteLine($"Base Damage: {Damage}\n");
+            Console.WriteLine($"Total Damage: {TotalDamage}\n");
 
             Console.Write("Weapon: ");
 
             if (EquippedWeapon != null)
             {
-                Console.WriteLine(EquippedWeapon.Name);
-                Console.WriteLine($"Weapon Damage: +{EquippedWeapon.Damage}");
+                Console.WriteLine($"{EquippedWeapon.Name}\n");
+                Console.WriteLine($"Weapon Damage: +{EquippedWeapon.Damage}\n");
+                Console.WriteLine(
+                    $"{ConsoleUI.PrintBar(" Durability", EquippedWeapon.Durability, EquippedWeapon.MaxDurability)}\n"
+                );
             }
             else
             {
@@ -110,9 +108,28 @@ namespace MiniRPG.Characters
             }
         }
 
-        public override void Attack(Character target)
+        public override int Attack(Character target)
         {
-            target.TakeDamage(TotalDamage);
+            int damage = TotalDamage;
+            target.TakeDamage(damage);
+
+            if (EquippedWeapon != null)
+            {
+                EquippedWeapon.UseDurability();
+
+                if (EquippedWeapon.IsBroken)
+                {
+                    Console.WriteLine($"\nYour {EquippedWeapon.Name} broke!");
+                    BreakWeapon();
+                }
+            }
+
+            return damage;
+        }
+
+        private void BreakWeapon()
+        {
+            EquippedWeapon = null;
         }
 
         public EquipmentResult EquipWeapon(Weapon weapon)

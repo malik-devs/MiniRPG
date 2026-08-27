@@ -1,6 +1,7 @@
 ﻿using MiniRPG.Characters;
 using MiniRPG.Enums;
 using MiniRPG.Items;
+using MiniRPG.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,6 +62,15 @@ namespace MiniRPG.Inventories
                     $"{count}. Name: {item.Name}\n"+
                     $"   Description: {item.Description}\n"
                 );
+
+                if (item is Weapon weapon)
+                {
+                    Console.WriteLine($"   Damage: +{weapon.Damage}");
+                    Console.WriteLine(
+                   $"{ConsoleUI.PrintBar(" Durability", weapon.Durability, weapon.MaxDurability)}"
+               );
+                }
+                Console.WriteLine("\n");
                 count++;
             }
         }

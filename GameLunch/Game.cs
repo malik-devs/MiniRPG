@@ -15,6 +15,7 @@ namespace MiniRPG.GameLunch
         {
             while (true)
             {
+                Console.Clear();
                 Console.WriteLine("======== Welcome To MiniRPG ========\n\n");
 
                 Console.WriteLine("Enter a name to your player....");
@@ -32,6 +33,7 @@ namespace MiniRPG.GameLunch
                     Console.WriteLine("\n=====================================");
                     Console.WriteLine("       🏆 YOU COMPLETED THE GAME!      ");
                     Console.WriteLine("=====================================\n");
+                    WaitForEnter();
                     break;
                 }
                 if (result == GameResult.Exit)
@@ -44,7 +46,8 @@ namespace MiniRPG.GameLunch
         {
             while (true)
             {
-                Console.WriteLine("\n\n================ MINI RPG ================\n\n");
+                Console.Clear();
+                Console.WriteLine("================ MINI RPG ================\n\n");
 
                 Console.WriteLine(
                     "1.Shop\n" +
@@ -96,24 +99,25 @@ namespace MiniRPG.GameLunch
             Shop shop = new Shop();
             shop.AddItem(new HealthPotion("Health Potion", 20, "Restores 30 HP", 30));
             shop.AddItem(new HealthPotion("Greater Health Potion", 40, "Restores 60 HP", 60));
-            shop.AddItem(new Weapon("Iron Sword", 50, "A simple iron sword.", 10));
-            shop.AddItem(new Weapon("Steel Sword", 80, "A stronger sword.", 20));
+            shop.AddItem(new Weapon("Iron Sword", 50, "A simple iron sword.", 10, 10));
+            shop.AddItem(new Weapon("Steel Sword", 80, "A stronger sword.", 20, 20));
 
             return shop;
         }
 
         private void PlayerStats(Player player)
         {
+            Console.Clear();
             player.PrintStats();
-            Console.WriteLine("Enter 0 to back..");
-            ReadChoice(0,0);
-            
+            WaitForEnter();
+
         }
 
         private void PrintShop(Shop shop, Player player)
         {
             while (true)
             {
+                Console.Clear();
                 Console.WriteLine("================  SHOP  ================");
                 shop.PrintItems();
                 Console.WriteLine("0. Exit\n");
@@ -123,6 +127,7 @@ namespace MiniRPG.GameLunch
                 if (choice == 0)
                 {
                     Console.WriteLine("Thank you for shoping....");
+                    WaitForEnter();
                     break;
                 }
                 else
@@ -131,6 +136,7 @@ namespace MiniRPG.GameLunch
                     if (item == null)
                     {
                         Console.WriteLine("Invalid choice.");
+                        WaitForEnter();
                         continue;
                     }
                     PurchaseResult result = shop.BuyItem(player, item);
@@ -149,6 +155,7 @@ namespace MiniRPG.GameLunch
                             break;
                     }
                 }
+                WaitForEnter();
             }
         }
 
@@ -156,6 +163,7 @@ namespace MiniRPG.GameLunch
         {
             while (true)
             {
+                Console.Clear();
                 Console.WriteLine("================ INVENTORY ================");
                 player.Inventory.PrintItems();
                 Console.WriteLine("0. Exit\n");
@@ -169,6 +177,7 @@ namespace MiniRPG.GameLunch
                     if (item == null)
                     {
                         Console.WriteLine("Invalid choice.");
+                        WaitForEnter();
                         continue;
                     }
                     ItemUseResult result = player.Inventory.UseItem(item, player);
@@ -182,6 +191,7 @@ namespace MiniRPG.GameLunch
                             break;
                     }
                 }
+                WaitForEnter();
             }
         }
 
@@ -194,10 +204,7 @@ namespace MiniRPG.GameLunch
 
             CombatSystem combat = new CombatSystem();
             BattleResult result = combat.StartBattle(player, enemy);
-            if (result == BattleResult.Win)
-            {
-                Console.WriteLine($"{enemy.Name} defeated\n");
-            }
+
 
             return result;
 
@@ -235,6 +242,14 @@ namespace MiniRPG.GameLunch
                 return GameResult.Exit;
             return GameResult.Restart;
         }
+
+        public void WaitForEnter()
+        {
+            Console.WriteLine("\nPress ENTER to continue...");
+            Console.ReadLine();
+        }
+
+        
 
     }
 }

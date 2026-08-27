@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace MiniRPG.Characters
 {
     public abstract class Character
@@ -45,9 +40,11 @@ namespace MiniRPG.Characters
             
         }
 
-        public virtual void Attack(Character target)
+        public virtual int Attack(Character target)
         {
-            target.TakeDamage(Damage);
+            int damage = Damage;
+            target.TakeDamage(damage);
+            return damage;
         }
 
         public void Heal(int amount)

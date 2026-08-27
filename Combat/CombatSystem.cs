@@ -1,12 +1,9 @@
 ﻿using MiniRPG.Characters;
 using MiniRPG.Characters.Enemies;
 using MiniRPG.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+using MiniRPG.UI;
+using System.Threading;
+
 
 namespace MiniRPG.Combat
 {
@@ -14,34 +11,126 @@ namespace MiniRPG.Combat
     {
         public BattleResult StartBattle(Player player, Enemy monster)
         {
-            while(!player.IsDead && !monster.IsDead)
+            monster.RestoreFullHP();
+
+            Console.Clear();
+            PrintBattleStart(player, monster);
+
+            WaitForEnter("Press ENTER to start the battel ...");
+            int damage=0;
+
+            while (!player.IsDead && !monster.IsDead)
             {
-                player.Attack(monster);
-                PrintHealth(monster);
+                //player turn
+                
+                Console.Clear();
+                Console.WriteLine("========================================");
+                Console.WriteLine("              YOUR TURN");
+                Console.WriteLine("========================================\n");
+                damage = player.Attack(monster);
+                PrintBattleStatus(player, monster, damage);
+
+                WaitForEnter("Press ENTER to continue...");
 
                 if (monster.IsDead)
                 {
                     break;
                 }
-                else
-                {
-                    monster.Attack(player);
-                    PrintHealth(player);
-                }
+
+                //Enemy Turn
+                Console.Clear();
+                Console.WriteLine("========================================");
+                Console.WriteLine("              ENEMY TURN");
+                Console.WriteLine("========================================\n");
+                damage = monster.Attack(player);
+                PrintBattleStatus(monster, player, damage);
+
+                WaitForEnter("Press ENTER to continue...");
             }
+
             if (!player.IsDead && monster.IsDead)
             {
                 player.ReceiveReward(monster.XPReward, monster.GoldReward);
-                player.PrintStats();
+
+                Console.Clear();
+                PrintVictory(player, monster);
+
                 return BattleResult.Win;
             }
-            else
-                return BattleResult.Dead;
+
+            Console.Clear();
+            PrintDefeat(player, monster);
+            return BattleResult.Dead;
 
         }
-        public void PrintHealth(Character character)
+
+        private void PrintBattleStart(Player player, Enemy monster)
         {
-            Console.WriteLine($"{character.Name} --> {character.HP}\n");
+            Console.WriteLine("╔════════════════════════════════════╗");
+            Console.WriteLine("║           BATTLE START             ║");
+            Console.WriteLine("╚════════════════════════════════════╝\n");
+
+            Console.WriteLine(ConsoleUI.PrintBar(player.Name, player.HP, player.MaxHP));
+            Console.WriteLine("              VS");
+            Console.WriteLine(ConsoleUI.PrintBar(monster.Name, monster.HP, monster.MaxHP));
+            Console.WriteLine("\n========================================\n");
+ 
         }
+
+        private void PrintBattleStatus(Character attacker, Character defender, int damage)
+        {
+            Console.WriteLine($"{attacker.Name} attacks =>> {defender.Name}!\n");
+            Console.WriteLine($"Damage dealt: {attacker.Damage}\n");
+
+            Console.WriteLine(ConsoleUI.PrintBar(defender.Name, defender.HP, defender.MaxHP));
+
+            Console.WriteLine("\n══════════════════════════════════\n");
+        }
+
+        private void WaitForEnter(string message)
+        {
+            Console.WriteLine($"\n{message}");
+            Console.ReadLine();
+        }
+
+        private void PrintVictory(Player player, Enemy monster)
+        {
+            Console.WriteLine("========================================");
+            Console.WriteLine("               VICTORY!");
+            Console.WriteLine("========================================\n");
+
+            Console.WriteLine($"You defeated {monster.Name}!\n");
+
+            Console.WriteLine("--------------- REWARDS ----------------\n");
+
+            Console.WriteLine($"XP Earned:   +{monster.XPReward}");
+            Console.WriteLine($"Gold Earned: +{monster.GoldReward}");
+
+            Console.WriteLine("----------------------------------------\n");
+
+            Console.WriteLine($"Current Level: {player.Level}");
+            Console.WriteLine($"Current XP:    {player.XP}");
+
+            WaitForEnter("Press ENTER to return...");
+        }
+
+        private void PrintDefeat(Player player, Enemy monster)
+        {
+            Console.WriteLine("========================================");
+            Console.WriteLine("                DEFEAT");
+            Console.WriteLine("========================================\n");
+
+            Console.WriteLine($"You were defeated by {monster.Name}.\n");
+
+            Console.WriteLine($"Final Level: {player.Level}");
+            Console.WriteLine($"Gold:        {player.Gold}");
+
+            WaitForEnter("Press ENTER to continue...");
+        }
+
+        
+
+        
+
     }
 }

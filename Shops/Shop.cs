@@ -43,8 +43,16 @@ namespace MiniRPG.Shops
                 Console.WriteLine(
                     $"{count}. {item.Name}\n" +
                     $"Price: {item.Price}\n" +
-                    $"Description: {item.Description}\n\n"
+                    $"Description: {item.Description}"
                 );
+
+                if(item is Weapon weapon)
+                {
+                    Console.WriteLine($"Damage:  +{weapon.Damage}");
+                    Console.WriteLine($"Durability: +{weapon.MaxDurability}");
+                }
+                Console.WriteLine("\n");
+
                 count++;
             }
         }

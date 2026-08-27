@@ -1,11 +1,7 @@
 ﻿using MiniRPG.Characters;
 using MiniRPG.Enums;
 using MiniRPG.Equipment;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace MiniRPG.Items
 {
@@ -13,10 +9,30 @@ namespace MiniRPG.Items
     {
         public int Damage { get; private set; }
 
+        public int MaxDurability {  get; private set; }
+        public int Durability { get; private set; }
 
-        public Weapon(string  name, int price, string desc, int damage) : base (name, price, desc)
+
+        public Weapon(string  name, int price, string desc, int damage, int maxDurability) : base (name, price, desc)
         {
             Damage = damage;
+            Durability = maxDurability;
+            MaxDurability = maxDurability;
+
+        }
+
+        public void UseDurability()
+        {
+            if(Durability > 0)
+                Durability--;
+        }
+
+        public bool IsBroken
+        {
+            get
+            {
+                return Durability <= 0;
+            }
         }
 
         public override Item Clone()
@@ -25,7 +41,8 @@ namespace MiniRPG.Items
             Name,
             Price,
             Description,
-            Damage
+            Damage,
+            MaxDurability
         );
         }
 

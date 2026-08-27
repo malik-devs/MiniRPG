@@ -21,6 +21,11 @@ namespace MiniRPG.Characters.Enemies
             MaxLevel = maxLevel;
         }
 
+        public void RestoreFullHP()
+        {
+            HP = MaxHP;
+        }
+
 
     }
 }
