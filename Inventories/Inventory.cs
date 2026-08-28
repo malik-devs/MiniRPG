@@ -12,7 +12,10 @@ namespace MiniRPG.Inventories
 {
     public class Inventory
     {
-        private List<Item> items = new List<Item>();
+        private List<Item> items  = new List<Item>();
+
+        public IReadOnlyList<Item> Items => items;
+
         public int Count => items.Count;
         public void AddItem(Item item)
         {

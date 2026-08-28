@@ -4,24 +4,83 @@ using MiniRPG.Combat;
 using MiniRPG.Enums;
 using MiniRPG.Events;
 using MiniRPG.Items;
+using MiniRPG.SaveSystem;
 using MiniRPG.Shops;
+using System.Numerics;
 
 
 namespace MiniRPG.GameLunch
 {
     public class Game
     {
-        public void Start()
-        {
+        private Player? StartGame()
+        {            
+            SaveManager saveManager = new SaveManager();
+
             while (true)
             {
                 Console.Clear();
                 Console.WriteLine("======== Welcome To MiniRPG ========\n\n");
 
-                Console.WriteLine("Enter a name to your player....");
-                string playerName = Console.ReadLine();
-                Player player = new Player(playerName);
-                Console.WriteLine($"Your Player name: {player.Name}\n\n");
+                Console.WriteLine(
+                    "1. New Game\n" +
+                    "2. Load Game\n" +
+                    "0. Exit\n"
+                );
+                Console.WriteLine("Enter your choice:");
+
+                int choice = ReadChoice(0, 2);
+
+
+                switch (choice)
+                {
+                    case 1:
+                        Console.WriteLine("\nEnter a name to your player....");
+                        string? playerName = Console.ReadLine();
+
+                        if (string.IsNullOrWhiteSpace(playerName))
+                        {
+                            Console.WriteLine("Name cannot be empty!");
+                            WaitForEnter();
+                            continue;
+                        }
+                        Console.WriteLine($"Your Player name: {playerName}\n\n");
+                        return new Player(playerName);
+
+                    case 2:
+                        Player? loadedPlayer = saveManager.Load();
+                        if (loadedPlayer == null)
+                        {
+                            Console.WriteLine("\nNo save game found!");
+                            WaitForEnter();
+
+                            continue;
+                        }
+                        Console.WriteLine("\nGame loaded successfully!");
+                        WaitForEnter();
+
+                        return loadedPlayer;
+
+                    case 0:
+                        return null;
+
+                    
+
+                }
+            }
+        }
+
+        public void Start()
+        {
+            
+            while (true)
+            {
+                
+                Player? player = StartGame();
+
+                if (player == null) break;
+
+               
                 Shop shop = CreateShop();
                 player.LevelUpEvent += OnLevelUp;
                 EnemyFactory enemyFactory = new EnemyFactory();
@@ -39,7 +98,7 @@ namespace MiniRPG.GameLunch
                 if (result == GameResult.Exit)
                     break;
             }
-            
+
         }
 
         private GameResult MainMenu(Player player, Shop shop, EnemyFactory enemyFactory)
@@ -54,12 +113,13 @@ namespace MiniRPG.GameLunch
                     "2.Inventory\n" +
                     "3.Player Stats\n" +
                     "4.Battle\n" +
+                    "5. Save Game\n" +
                     "0.Exit" +
                     "\n\n"
                     );
                 Console.WriteLine("Enter your choice: ");
 
-                int choice = ReadChoice(0,4);
+                int choice = ReadChoice(0,5);
                 BattleResult result;
                 switch (choice)
                 {
@@ -87,7 +147,14 @@ namespace MiniRPG.GameLunch
                             break;
                         }
                         return GameOver();
-                        
+                    case 5:
+                        SaveManager saveManager = new SaveManager();
+                        saveManager.Save(player);
+
+                        Console.WriteLine("\nGame saved successfully!");
+                        WaitForEnter();
+                        break;
+
                 }
                 
             }
@@ -248,6 +315,9 @@ namespace MiniRPG.GameLunch
             Console.WriteLine("\nPress ENTER to continue...");
             Console.ReadLine();
         }
+
+        
+
 
         
 

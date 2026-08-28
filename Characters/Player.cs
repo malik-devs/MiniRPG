@@ -3,6 +3,7 @@ using MiniRPG.Events;
 using MiniRPG.Items;
 using MiniRPG.Inventories;
 using MiniRPG.UI;
+using MiniRPG.SaveSystem;
 
 namespace MiniRPG.Characters
 {
@@ -148,7 +149,17 @@ namespace MiniRPG.Characters
 
             return EquipmentResult.Success;
         }
-        
+
+        public EquipmentResult RestoreEquippedWeapon(Weapon weapon)
+        {
+            if (weapon == null)
+                throw new ArgumentNullException(nameof(weapon));
+
+            EquippedWeapon = weapon;
+
+            return EquipmentResult.Success;
+        }
+
         public EquipmentResult UnequipWeapon()
         {
             if (EquippedWeapon == null)
@@ -160,6 +171,17 @@ namespace MiniRPG.Characters
 
         }
 
+        //دالة لاسترجاع البيانات المحفوظة
+        public void RestoreState(PlayerSaveData data)
+        {
+            HP = data.HP;
+            Gold = data.Gold;
+            Level = data.Level;
+            XP = data.XP;
+            XpMax = data.XpMax;
+
+            
+        }
         
     }
 }

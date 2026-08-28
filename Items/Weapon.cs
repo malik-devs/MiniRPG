@@ -57,5 +57,16 @@ namespace MiniRPG.Items
 
 
         }
+
+        public void RestoreDurability(int durability)
+        {
+            if (Durability < 0)
+                Durability = 0;
+            else if (Durability > MaxDurability)
+                Durability = MaxDurability;
+            else
+                Durability = durability;
+        }
+
     }
 }
