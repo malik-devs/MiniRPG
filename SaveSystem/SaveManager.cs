@@ -23,6 +23,7 @@ namespace MiniRPG.SaveSystem
             //البيانات الحالية 
             data.Name = player.Name;
             data.HP = player.HP;
+            data.MaxHP = player.MaxHP;
             data.Gold = player.Gold;
             data.Level = player.Level;
             data.XP = player.XP;

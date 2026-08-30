@@ -90,7 +90,7 @@ namespace MiniRPG.GameLunch
                 if (result == GameResult.Victory)
                 {
                     Console.WriteLine("\n=====================================");
-                    Console.WriteLine("       🏆 YOU COMPLETED THE GAME!      ");
+                    Console.WriteLine("        YOU COMPLETED THE GAME!      ");
                     Console.WriteLine("=====================================\n");
                     WaitForEnter();
                     break;
@@ -109,12 +109,12 @@ namespace MiniRPG.GameLunch
                 Console.WriteLine("================ MINI RPG ================\n\n");
 
                 Console.WriteLine(
-                    "1.Shop\n" +
-                    "2.Inventory\n" +
-                    "3.Player Stats\n" +
-                    "4.Battle\n" +
+                    "1. Shop\n" +
+                    "2. Inventory\n" +
+                    "3. Player Stats\n" +
+                    "4. Battle\n" +
                     "5. Save Game\n" +
-                    "0.Exit" +
+                    "0. Exit" +
                     "\n\n"
                     );
                 Console.WriteLine("Enter your choice: ");
@@ -164,10 +164,10 @@ namespace MiniRPG.GameLunch
         private Shop CreateShop()
         {
             Shop shop = new Shop();
-            shop.AddItem(new HealthPotion("Health Potion", 20, "Restores 30 HP", 30));
-            shop.AddItem(new HealthPotion("Greater Health Potion", 40, "Restores 60 HP", 60));
-            shop.AddItem(new Weapon("Iron Sword", 50, "A simple iron sword.", 10, 10));
-            shop.AddItem(new Weapon("Steel Sword", 80, "A stronger sword.", 20, 20));
+            shop.AddItem(new HealthPotion("Health Potion", 20, "Restores 50 HP", 50));
+            shop.AddItem(new HealthPotion("Greater Health Potion", 40, "Restores 90 HP", 90));
+            shop.AddItem(new Weapon("Iron Sword", 30, "A simple iron sword.", 10, 10));
+            shop.AddItem(new Weapon("Steel Sword", 50, "A stronger sword.", 20, 20));
 
             return shop;
         }

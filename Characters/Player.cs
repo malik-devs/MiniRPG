@@ -31,7 +31,7 @@ namespace MiniRPG.Characters
         //Methods
         public Player(string name):base(name,100,15)
         {
-            Gold = 20;
+            Gold = 100;
             Level = 1;
             XP = 0;
             XpMax = 100;
@@ -86,6 +86,10 @@ namespace MiniRPG.Characters
                 Level++;
                 XpMax += 50;
 
+                if (Level % 2 == 0)
+                    MaxHP += 50;
+                
+                Heal();
                 LevelUpEvent?.Invoke(this, new LevelUpEventArgs(Level,Level-1));
             }
         }
@@ -175,6 +179,7 @@ namespace MiniRPG.Characters
         public void RestoreState(PlayerSaveData data)
         {
             HP = data.HP;
+            MaxHP = data.MaxHP;
             Gold = data.Gold;
             Level = data.Level;
             XP = data.XP;
