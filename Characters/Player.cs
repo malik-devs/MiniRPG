@@ -202,6 +202,8 @@ namespace MiniRPG.Characters
             Level = data.Level;
             XP = data.XP;
             XpMax = data.XpMax;
+            Defense = data.Defense;
+            MaxDefense = data.MaxDefense;
 
             
         }
