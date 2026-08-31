@@ -9,6 +9,7 @@ namespace MiniRPG.Enums
     public enum ItemUseResult
     {
         Success,
-        Failed
+        Failed,
+        CannotUse
     }
 }

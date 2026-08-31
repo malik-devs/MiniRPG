@@ -168,6 +168,8 @@ namespace MiniRPG.GameLunch
             shop.AddItem(new HealthPotion("Greater Health Potion", 40, "Restores 90 HP", 90));
             shop.AddItem(new Weapon("Iron Sword", 30, "A simple iron sword.", 10, 10));
             shop.AddItem(new Weapon("Steel Sword", 50, "A stronger sword.", 20, 20));
+            shop.AddItem(new DefensePotion("Defense Potion", 25, "restores 5 Defense", 5));
+
 
             return shop;
         }
@@ -220,6 +222,10 @@ namespace MiniRPG.GameLunch
                         case PurchaseResult.NotEnoughGold:
                             Console.WriteLine("Not enough Gold.");
                             break;
+
+                        case PurchaseResult.LevelTooLow:
+                            Console.WriteLine("You need to be level 3 to buy this item!!.");
+                            break;
                     }
                 }
                 WaitForEnter();
@@ -255,6 +261,9 @@ namespace MiniRPG.GameLunch
                             break;
                         case ItemUseResult.Failed:
                             Console.WriteLine($"{item.Name} Faild to use");
+                            break;
+                        case ItemUseResult.CannotUse:
+                            Console.WriteLine($"{item.Name} need to be level 3 to use it.");
                             break;
                     }
                 }

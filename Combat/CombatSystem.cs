@@ -17,7 +17,7 @@ namespace MiniRPG.Combat
             PrintBattleStart(player, monster);
 
             WaitForEnter("Press ENTER to start the battel ...");
-            int damage=0;
+            DamageResult damageResult;
 
             while (!player.IsDead && !monster.IsDead)
             {
@@ -27,8 +27,8 @@ namespace MiniRPG.Combat
                 Console.WriteLine("========================================");
                 Console.WriteLine("              YOUR TURN");
                 Console.WriteLine("========================================\n");
-                damage = player.Attack(monster);
-                PrintBattleStatus(player, monster, damage);
+                damageResult = player.Attack(monster);
+                PrintBattleStatus(player, monster, damageResult);
 
                 WaitForEnter("Press ENTER to continue...");
 
@@ -42,8 +42,8 @@ namespace MiniRPG.Combat
                 Console.WriteLine("========================================");
                 Console.WriteLine("              ENEMY TURN");
                 Console.WriteLine("========================================\n");
-                damage = monster.Attack(player);
-                PrintBattleStatus(monster, player, damage);
+                damageResult = monster.Attack(player);
+                PrintBattleStatus(monster, player, damageResult);
 
                 WaitForEnter("Press ENTER to continue...");
             }
@@ -77,10 +77,28 @@ namespace MiniRPG.Combat
  
         }
 
-        private void PrintBattleStatus(Character attacker, Character defender, int damage)
+        private void PrintBattleStatus(Character attacker, Character defender, DamageResult damageResult)
         {
             Console.WriteLine($"{attacker.Name} attacks =>> {defender.Name}!\n");
-            Console.WriteLine($"Damage dealt: {attacker.Damage}\n");
+
+            Console.WriteLine($" Total Damage: {damageResult.TotalDamage}");
+
+            if (damageResult.DefenseDamage > 0)
+            {
+                Console.WriteLine(
+                    $" Defense Damage: {damageResult.DefenseDamage}");
+            }
+
+            if (damageResult.HPDamage > 0)
+            {
+                Console.WriteLine(
+                    $" HP Damage: {damageResult.HPDamage}");
+            }
+
+            Console.WriteLine();
+
+            if (defender.MaxDefense > 0)
+                { Console.WriteLine(ConsoleUI.PrintBar("Defense", defender.Defense, defender.MaxDefense)); }
 
             Console.WriteLine(ConsoleUI.PrintBar(defender.Name, defender.HP, defender.MaxHP));
 

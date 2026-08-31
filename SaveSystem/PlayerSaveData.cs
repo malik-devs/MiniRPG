@@ -18,6 +18,9 @@ namespace MiniRPG.SaveSystem
 
         public int XpMax { get; set; }
 
+        public int Defense { get; set; }
+        public int MaxDefense { get; set; }
+
         public List<ItemSaveData> InventoryItems { get; set; } = new List<ItemSaveData>();
 
         public ItemSaveData? EquippedWeapon { get; set; }

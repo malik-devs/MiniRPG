@@ -10,6 +10,7 @@ namespace MiniRPG.Enums
     {
         Success, 
         ItemNotFound,
-        NotEnoughGold
+        NotEnoughGold,
+        LevelTooLow
     }
 }

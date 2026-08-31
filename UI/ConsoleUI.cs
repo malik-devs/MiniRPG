@@ -11,6 +11,7 @@ namespace MiniRPG.UI
     {
         public static string PrintBar(string label, int currentValue, int maxValue)
         {
+            if(maxValue <= 0) return $"{label}: Not avilable";
             int barLength = 20;
 
             double percentage = (double)currentValue / maxValue;
