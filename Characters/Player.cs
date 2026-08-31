@@ -75,11 +75,6 @@ namespace MiniRPG.Characters
             {
                 Console.WriteLine("No Equipped Weapon");
             }
-            if (MaxDefense > 0)
-            {
-                Console.WriteLine(
-                    $"{ConsoleUI.PrintBar("Defense", Defense, MaxDefense)}\n");
-            }
 
             Console.WriteLine("==============================");
         }
