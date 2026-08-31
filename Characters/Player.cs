@@ -4,6 +4,7 @@ using MiniRPG.Items;
 using MiniRPG.Inventories;
 using MiniRPG.UI;
 using MiniRPG.SaveSystem;
+using MiniRPG.Combat;
 
 namespace MiniRPG.Characters
 {
@@ -29,7 +30,7 @@ namespace MiniRPG.Characters
         public event EventHandler<LevelUpEventArgs> LevelUpEvent;
 
         //Methods
-        public Player(string name):base(name,100,15)
+        public Player(string name):base(name,100,15,0)
         {
             Gold = 100;
             Level = 1;
@@ -44,8 +45,16 @@ namespace MiniRPG.Characters
 
         public void PrintStats()
         {
+            Console.WriteLine("╔════════════════════════════════════╗");
+            Console.WriteLine("║           PLAYER STATS             ║");
+            Console.WriteLine("╚════════════════════════════════════╝\n");
             Console.WriteLine($"Name: {Name}\n");
             Console.WriteLine($"{ConsoleUI.PrintBar("HP",HP,MaxHP)}\n");
+            if (MaxDefense > 0)
+            {
+                Console.WriteLine(
+                    $"{ConsoleUI.PrintBar("Defense", Defense, MaxDefense)}\n");
+            }
             Console.WriteLine($"Gold: {Gold}\n");
             Console.WriteLine($"Level: {Level}\n");
             Console.WriteLine($"{ConsoleUI.PrintBar("XP", XP, XpMax)}\n");
@@ -88,8 +97,19 @@ namespace MiniRPG.Characters
 
                 if (Level % 2 == 0)
                     MaxHP += 50;
+
+                if(Level == 3)
+                {
+                    MaxDefense = 50;
+                }
+                else if(Level > 3)
+                {
+                    MaxDefense += 25;
+                }
+                    
                 
                 Heal();
+                RestoreFullDefense();
                 LevelUpEvent?.Invoke(this, new LevelUpEventArgs(Level,Level-1));
             }
         }
@@ -113,23 +133,21 @@ namespace MiniRPG.Characters
             }
         }
 
-        public override int Attack(Character target)
+        public override DamageResult Attack(Character target)
         {
             int damage = TotalDamage;
-            target.TakeDamage(damage);
+            DamageResult result = target.TakeDamage(damage);
 
             if (EquippedWeapon != null)
             {
                 EquippedWeapon.UseDurability();
-
                 if (EquippedWeapon.IsBroken)
                 {
                     Console.WriteLine($"\nYour {EquippedWeapon.Name} broke!");
                     BreakWeapon();
                 }
             }
-
-            return damage;
+            return result;
         }
 
         private void BreakWeapon()
@@ -184,6 +202,8 @@ namespace MiniRPG.Characters
             Level = data.Level;
             XP = data.XP;
             XpMax = data.XpMax;
+            Defense = data.Defense;
+            MaxDefense = data.MaxDefense;
 
             
         }

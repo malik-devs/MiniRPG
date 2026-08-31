@@ -69,6 +69,12 @@ namespace MiniRPG.Shops
             {
                 return PurchaseResult.ItemNotFound;
             }
+
+            if (item is DefensePotion && player.Level < 3)
+            {
+                return PurchaseResult.LevelTooLow;
+            }
+
             if (!player.SpendGold(item.Price))
             {
                 return PurchaseResult.NotEnoughGold;

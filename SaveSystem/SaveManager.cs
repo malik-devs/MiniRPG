@@ -28,6 +28,8 @@ namespace MiniRPG.SaveSystem
             data.Level = player.Level;
             data.XP = player.XP;
             data.XpMax = player.XpMax;
+            data.Defense = player.Defense;
+            data.MaxDefense = player.MaxDefense;
 
             // حفظ عناصر الـ Inventory
             foreach (Item item in player.Inventory.Items)

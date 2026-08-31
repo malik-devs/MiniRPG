@@ -13,7 +13,7 @@ namespace MiniRPG.Characters.Enemies
         public int MinLevel {  get; private set; }
         public int MaxLevel { get; private set; }
 
-        public Enemy(string name, int maxHP, int damage, int xpReward, int goldReward, int minLevel, int maxLevel):base(name,  maxHP, damage)
+        public Enemy(string name, int maxHP, int damage,int maxDefense ,int xpReward, int goldReward, int minLevel, int maxLevel):base(name,  maxHP, damage, maxDefense)
         {
             XPReward = xpReward;
             GoldReward = goldReward;

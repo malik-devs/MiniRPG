@@ -1,4 +1,6 @@
 ﻿
+using MiniRPG.Combat;
+
 namespace MiniRPG.Characters
 {
     public abstract class Character
@@ -17,34 +19,56 @@ namespace MiniRPG.Characters
             }
         }
 
-        protected Character(string name, int maxHP, int damage)
+        public int Defense { get; protected set; }
+        public int MaxDefense { get; protected set; }
+
+        protected Character(string name, int maxHP, int damage, int maxDefense)
         {
             Name = name;
             HP = maxHP;
             MaxHP = maxHP;
             Damage = damage;
+            Defense = maxDefense;
+            MaxDefense = maxDefense;
         }
 
-        public void TakeDamage(int damage)
+        public DamageResult TakeDamage(int damage)
         {
+            int defenseDamage = 0;
+            int hpDamage = 0;
+
+
             if (damage < 0)
             {
                 throw new ArgumentException("Damage cannot be negative.");
             }
-            HP -= damage;
+            
+            if(damage <= Defense)
+            {
+                defenseDamage = damage;
+                Defense -= damage;
+            }
+            else
+            {
+                defenseDamage = Defense;
+                int remainingDamage = damage - Defense;
+                hpDamage = Math.Min(HP, remainingDamage);
+                HP -= hpDamage;
+                Defense = 0;
+            }
 
             if (HP < 0) 
             { 
                 HP = 0; 
             }
+
+            return new DamageResult(damage, defenseDamage, hpDamage);
             
         }
 
-        public virtual int Attack(Character target)
+        public virtual DamageResult Attack(Character target)
         {
-            int damage = Damage;
-            target.TakeDamage(damage);
-            return damage;
+            return target.TakeDamage(Damage);
         }
 
         public void Heal(int amount)
@@ -62,6 +86,25 @@ namespace MiniRPG.Characters
             }
         }
 
-       
+        public void RestoreDefense(int amount)
+        {
+            if (amount < 0)
+            {
+                throw new ArgumentException("Defense restore amount cannot be negative.");
+            }
+
+            Defense += amount;
+
+            if (Defense > MaxDefense)
+            {
+                Defense = MaxDefense;
+            }
+        }
+        public void RestoreFullDefense()
+        {
+            Defense = MaxDefense;
+        }
+
+
     }
 }
