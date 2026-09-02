@@ -27,38 +27,6 @@ MiniRPG is a learning project created to practice **Object-Oriented Programming 
 * **Visual Studio 2022**
 * **Git & GitHub**
 
-## 📁 Project Structure
-
-```text
-MiniRPG
-│
-├── Characters
-│   ├── Character.cs
-│   ├── Player.cs
-│   └── Enemy.cs
-│
-├── Combat
-│   └── CombatSystem.cs
-│
-├── Items
-│   ├── Item.cs
-│   ├── HealthPotion.cs
-│   └── Inventory.cs
-│
-├── Shops
-│   └── Shop.cs
-│
-├── Factories
-│   └── EnemyFactory.cs
-│
-├── Enums
-│
-├── Events
-│
-└── GameLunch
-    └── Game.cs
-```
-
 ## 🎮 How to Run
 
 ### Requirements
