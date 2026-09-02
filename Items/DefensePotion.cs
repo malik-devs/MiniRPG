@@ -11,6 +11,7 @@ namespace MiniRPG.Items
     public class DefensePotion : Item
     {
         public int DefenseAmount { get; private set; }
+        public override bool IsStackable => true;
         public DefensePotion(string name, int price, string description, int defenseAmount) : base(name, price, description)
         {
             DefenseAmount = defenseAmount;

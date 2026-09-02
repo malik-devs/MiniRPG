@@ -19,11 +19,17 @@ namespace MiniRPG.UI
                 return;
             }
             int count = 1;
-            foreach (Item item in inventory.Items)
+            foreach (InventoryItem inventoryItem in inventory.Items)
             {
+                Item item = inventoryItem.Item;
+
                 Console.WriteLine(
-                    $"{count}. Name: {item.Name}\n" +
-                    $"   Description: {item.Description}\n"
+                    $"{count}. {item.Name}" +
+                    (item.IsStackable ? $" x{inventoryItem.Quantity}" : "")
+                );
+
+                Console.WriteLine(
+                    $"   Description: {item.Description}"
                 );
 
                 if (item is Weapon weapon)
