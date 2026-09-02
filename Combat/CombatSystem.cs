@@ -83,22 +83,34 @@ namespace MiniRPG.Combat
 
             Console.WriteLine($" Total Damage: {damageResult.TotalDamage}");
 
-            if (damageResult.DefenseDamage > 0)
+            if (damageResult.ArmorAbsorbedDamage > 0)
             {
                 Console.WriteLine(
-                    $" Defense Damage: {damageResult.DefenseDamage}");
+                    $" Armor Absorbed: {damageResult.ArmorAbsorbedDamage}");
             }
 
-            if (damageResult.HPDamage > 0)
+            Console.WriteLine($" Defense Damage: {damageResult.DefenseDamage}");
+           
+            Console.WriteLine($" HP Damage: {damageResult.HPDamage}");
+            
+            Console.WriteLine();
+
+            if(defender is Player defenderPlayer)
             {
-                Console.WriteLine(
-                    $" HP Damage: {damageResult.HPDamage}");
+                if(defenderPlayer.EquippedArmor !=  null)
+                { Console.WriteLine(ConsoleUI.PrintBar(defenderPlayer.EquippedArmor.Name, defenderPlayer.EquippedArmor.Durability, defenderPlayer.EquippedArmor.MaxDurability)); }
+            }else if(attacker is Player attackerPlayer)
+            {
+                if (attackerPlayer.EquippedWeapon != null)
+                { Console.WriteLine(ConsoleUI.PrintBar(attackerPlayer.EquippedWeapon.Name, attackerPlayer.EquippedWeapon.Durability, attackerPlayer.EquippedWeapon.MaxDurability)); }
             }
 
             Console.WriteLine();
 
             if (defender.MaxDefense > 0)
                 { Console.WriteLine(ConsoleUI.PrintBar("Defense", defender.Defense, defender.MaxDefense)); }
+
+            
 
             Console.WriteLine(ConsoleUI.PrintBar(defender.Name, defender.HP, defender.MaxHP));
 

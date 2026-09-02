@@ -14,8 +14,11 @@
         public int Damage { get; set; }
         public int MaxDurability {  get; set; }
         public int Durability { get; set; }
+        public int DamageReductionPercentage { get; set; }
+        public int DefenseAmount { get; set; }
 
-        
+
+
 
     }
 }

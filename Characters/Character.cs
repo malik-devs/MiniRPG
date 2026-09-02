@@ -32,7 +32,7 @@ namespace MiniRPG.Characters
             MaxDefense = maxDefense;
         }
 
-        public DamageResult TakeDamage(int damage)
+        public virtual DamageResult TakeDamage(int damage)
         {
             int defenseDamage = 0;
             int hpDamage = 0;
@@ -62,7 +62,7 @@ namespace MiniRPG.Characters
                 HP = 0; 
             }
 
-            return new DamageResult(damage, defenseDamage, hpDamage);
+            return new DamageResult(damage, 0, defenseDamage, hpDamage);
             
         }
 

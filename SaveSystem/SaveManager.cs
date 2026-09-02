@@ -1,6 +1,7 @@
 ﻿using MiniRPG.Characters;
 using System.Text.Json;
 using MiniRPG.Items;
+using MiniRPG.Items.Equipments;
 
 namespace MiniRPG.SaveSystem
 {
@@ -41,6 +42,10 @@ namespace MiniRPG.SaveSystem
             if (player.EquippedWeapon != null)
             {
                 data.EquippedWeapon = CreateItemSaveData(player.EquippedWeapon);
+            }
+            if (player.EquippedArmor != null)
+            {
+                data.EquippedArmor = CreateItemSaveData(player.EquippedArmor);
             }
 
             //لتحويل البيانات objects الى JSON
@@ -90,7 +95,16 @@ namespace MiniRPG.SaveSystem
 
                     if (item is Weapon weapon)
                     {
-                        player.RestoreEquippedWeapon(weapon);
+                        player.RestoreEquippedEquipment(weapon);
+                    }
+                }
+                if (data.EquippedArmor != null)
+                {
+                    Item? item = CreateItem(data.EquippedArmor);
+
+                    if (item is Armor armor)
+                    {
+                        player.RestoreEquippedEquipment(armor);
                     }
                 }
 
@@ -98,10 +112,12 @@ namespace MiniRPG.SaveSystem
             }
             catch (JsonException)
             {
+                Console.WriteLine($"Exception is {nameof(JsonException)}");
                 return null;
             }
             catch (IOException)
             {
+                Console.WriteLine($"Exception is {nameof(IOException)}");
                 return null;
             }
         }
@@ -114,7 +130,7 @@ namespace MiniRPG.SaveSystem
             data.Price = item.Price;
             data.Description = item.Description;
 
-            if(item is Weapon weapon)
+            if (item is Weapon weapon)
             {
                 data.Type = nameof(Weapon);
                 data.Damage = weapon.Damage;
@@ -125,6 +141,18 @@ namespace MiniRPG.SaveSystem
             {
                 data.Type = nameof(HealthPotion);
                 data.HealAmount = potion.HealAmount;
+            }
+            else if (item is Armor armor) 
+            {
+                data.Type = nameof(Armor);
+                data.DamageReductionPercentage = armor.DamageReductionPercentage;
+                data.MaxDurability = armor.MaxDurability;
+                data.Durability = armor.Durability;
+            }
+            else if (item is DefensePotion defensePotion)
+            {
+                data.Type = nameof(DefensePotion);
+                data.DefenseAmount = defensePotion.DefenseAmount;
             }
 
             return data;
@@ -147,6 +175,21 @@ namespace MiniRPG.SaveSystem
                 return weapon;
             }
 
+            if (data.Type == nameof(Armor))
+            {
+                Armor armor = new Armor(
+                    data.Name,
+                    data.Price,
+                    data.Description,
+                    data.MaxDurability,
+                    data.DamageReductionPercentage
+                );
+
+                armor.RestoreDurability(data.Durability);
+
+                return armor;
+            }
+
             if (data.Type == nameof(HealthPotion))
             {
                 return new HealthPotion(
@@ -154,6 +197,15 @@ namespace MiniRPG.SaveSystem
                     data.Price,
                     data.Description,
                     data.HealAmount
+                );
+            }
+            if (data.Type == nameof(DefensePotion))
+            {
+                return new DefensePotion(
+                    data.Name,
+                    data.Price,
+                    data.Description,
+                    data.DefenseAmount
                 );
             }
 
