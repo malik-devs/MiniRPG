@@ -1,6 +1,5 @@
 ﻿using MiniRPG.Events;
 using MiniRPG.Inventories;
-using MiniRPG.UI;
 using MiniRPG.SaveSystem;
 using MiniRPG.Combat;
 using MiniRPG.Enums;
@@ -42,59 +41,6 @@ namespace MiniRPG.Characters
         public void Heal()
         {
             HP = MaxHP;
-        }
-
-        public void PrintStats()
-        {
-            Console.WriteLine("╔════════════════════════════════════╗");
-            Console.WriteLine("║           PLAYER STATS             ║");
-            Console.WriteLine("╚════════════════════════════════════╝\n");
-            Console.WriteLine($"Name: {Name}\n");
-            Console.WriteLine($"{ConsoleUI.PrintBar("HP", HP, MaxHP)}\n");
-            if (MaxDefense > 0)
-            {
-                Console.WriteLine(
-                    $"{ConsoleUI.PrintBar("Defense", Defense, MaxDefense)}\n");
-            }
-            Console.WriteLine($"Gold: {Gold}\n");
-            Console.WriteLine($"Level: {Level}\n");
-            Console.WriteLine($"{ConsoleUI.PrintBar("XP", XP, XpMax)}\n");
-            Console.WriteLine("======================================\n");
-            Console.WriteLine($"Base Damage: {Damage}\n");
-            
-
-            Console.Write("Weapon: ");
-
-            if (EquippedWeapon != null)
-            {
-                Console.WriteLine($"{EquippedWeapon.Name}\n");
-                Console.WriteLine($"Weapon Damage: +{EquippedWeapon.Damage}\n");
-                Console.WriteLine(
-                    $"{ConsoleUI.PrintBar(" Durability", EquippedWeapon.Durability, EquippedWeapon.MaxDurability)}\n"
-                );
-                Console.WriteLine($"Total Damage: {TotalDamage}\n");
-
-            }
-            else
-            {
-                Console.WriteLine("No Equipped Weapon");
-            }
-                Console.WriteLine("==============================\n");
-
-            if (EquippedArmor != null)
-            {
-                Console.WriteLine($"{EquippedArmor.Name}\n");
-                Console.WriteLine($"Armor Damage Reduction Percentage: %{EquippedArmor.DamageReductionPercentage}\n");
-                Console.WriteLine(
-                    $"{ConsoleUI.PrintBar(" Durability", EquippedArmor.Durability, EquippedArmor.MaxDurability)}\n"
-                );
-            }
-            else
-            {
-                Console.WriteLine("No Equipped Armor");
-            }
-
-            Console.WriteLine("==============================");
         }
 
         public void ReceiveReward(int xpReward, int goldReward)
@@ -161,7 +107,6 @@ namespace MiniRPG.Characters
                 EquippedWeapon.UseDurability();
                 if (EquippedWeapon.IsBroken)
                 {
-                    Console.WriteLine($"\nYour {EquippedWeapon.Name} broke!");
                     BreakWeapon();
                 }
             }
@@ -189,9 +134,6 @@ namespace MiniRPG.Characters
 
                 if (EquippedArmor.IsBroken)
                 {
-                    Console.WriteLine(
-                        $"\nYour {EquippedArmor.Name} broke!");
-
                     EquippedArmor = null;
                 }
             }

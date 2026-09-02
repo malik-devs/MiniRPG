@@ -4,13 +4,13 @@ using MiniRPG.Combat;
 using MiniRPG.Enums;
 using MiniRPG.Events;
 using MiniRPG.Items;
+using MiniRPG.Items.Equipments;
 using MiniRPG.SaveSystem;
 using MiniRPG.Shops;
-using MiniRPG.Items.Equipments;
-using System.Numerics;
+using MiniRPG.UI;
 
 
-namespace MiniRPG.GameLunch
+namespace MiniRPG.GameLaunch
 {
     public class Game
     {
@@ -179,7 +179,8 @@ namespace MiniRPG.GameLunch
         private void PlayerStats(Player player)
         {
             Console.Clear();
-            player.PrintStats();
+            PlayerUI playerUI = new PlayerUI();
+            playerUI.PrintStats(player);
             WaitForEnter();
 
         }
@@ -190,7 +191,8 @@ namespace MiniRPG.GameLunch
             {
                 Console.Clear();
                 Console.WriteLine("================  SHOP  ================");
-                shop.PrintItems();
+                ShopUI shopUI = new ShopUI();
+                shopUI.PrintItems(shop);
                 Console.WriteLine("0. Exit\n");
                 Console.WriteLine($"Gold: {player.Gold}\n");
                 Console.WriteLine("Enter Your Choice...");
@@ -241,7 +243,9 @@ namespace MiniRPG.GameLunch
             {
                 Console.Clear();
                 Console.WriteLine("================ INVENTORY ================");
-                player.Inventory.PrintItems();
+                InventoryUI inventoryUI = new InventoryUI();
+                inventoryUI.PrintItems(player.Inventory); 
+                
                 if (player.EquippedWeapon != null)
                 {
                     Console.WriteLine("-1. Unequip Weapon.");
@@ -301,8 +305,10 @@ namespace MiniRPG.GameLunch
             if (enemy == null)
                 return BattleResult.NoEnemy;
 
-            CombatSystem combat = new CombatSystem();
-            BattleResult result = combat.StartBattle(player, enemy);
+            CombatSystem combatSystem = new CombatSystem();
+            CombatUI combatUI = new CombatUI(combatSystem);
+
+            BattleResult result = combatUI.StartBattle(player, enemy);
 
 
             return result;

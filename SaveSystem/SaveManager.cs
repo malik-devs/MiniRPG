@@ -60,8 +60,7 @@ namespace MiniRPG.SaveSystem
 
         public Player? Load()
         {
-            try
-            {
+            
                 //اذا لم يجد الملف لا يقرأ
                 if (!File.Exists(SaveFilePath)) return null;
 
@@ -109,17 +108,7 @@ namespace MiniRPG.SaveSystem
                 }
 
                 return player;
-            }
-            catch (JsonException)
-            {
-                Console.WriteLine($"Exception is {nameof(JsonException)}");
-                return null;
-            }
-            catch (IOException)
-            {
-                Console.WriteLine($"Exception is {nameof(IOException)}");
-                return null;
-            }
+            
         }
 
         private ItemSaveData CreateItemSaveData(Item item)

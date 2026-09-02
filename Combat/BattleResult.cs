@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniRPG.Enums
+namespace MiniRPG.Combat
 {
     public enum BattleResult
     {
         Win,
         Dead,
-        NoEnemy
+        NoEnemy,
+        InProgress
     }
 }

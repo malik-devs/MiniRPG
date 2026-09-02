@@ -1,6 +1,6 @@
 ﻿using MiniRPG.Characters;
 using MiniRPG.Characters.Enemies;
-using MiniRPG.GameLunch;
+using MiniRPG.GameLaunch;
 using MiniRPG.SaveSystem;
 
 namespace MiniRPG

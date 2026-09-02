@@ -1,26 +1,20 @@
 ﻿using MiniRPG.Characters;
 using MiniRPG.Enums;
 using MiniRPG.Items;
-using MiniRPG.Items.Equipments;
-using MiniRPG.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MiniRPG.Inventories
 {
     public class Inventory
     {
-        private List<Item> items  = new List<Item>();
+        private List<Item> items = new List<Item>();
 
         public IReadOnlyList<Item> Items => items;
 
         public int Count => items.Count;
+
         public void AddItem(Item item)
         {
-            if(item !=  null)
+            if (item != null)
                 items.Add(item);
         }
 
@@ -35,8 +29,6 @@ namespace MiniRPG.Inventories
             return items.Contains(item);
         }
 
-        
-
         public Item? FindItem(string name)
         {
             foreach (Item item in items)
@@ -44,46 +36,16 @@ namespace MiniRPG.Inventories
                 if (item.Name == name)
                     return item;
             }
+
             return null;
         }
+
         public Item? GetItem(int index)
         {
-            if (index <= 0 || index > items.Count) return null;
+            if (index <= 0 || index > items.Count)
+                return null;
+
             return items[index - 1];
-        }
-
-        public void PrintItems()
-        {
-            if (items.Count == 0)
-            {
-                Console.WriteLine("Inventory is empty..");
-                return;
-            }
-            int count = 1;
-            foreach (Item item in items)
-            {
-                Console.WriteLine(
-                    $"{count}. Name: {item.Name}\n"+
-                    $"   Description: {item.Description}\n"
-                );
-
-                if (item is Weapon weapon)
-                {
-                    Console.WriteLine($"   Damage: +{weapon.Damage}");
-                    Console.WriteLine(
-                   $"{ConsoleUI.PrintBar(" Durability", weapon.Durability, weapon.MaxDurability)}"
-                    );
-                }
-                if (item is Armor armor)
-                {
-                    Console.WriteLine($"   Damage Reduction Percentage: %{armor.DamageReductionPercentage}");
-                    Console.WriteLine(
-                   $"{ConsoleUI.PrintBar(" Durability", armor.Durability, armor.MaxDurability)}"
-                    );
-                }
-                Console.WriteLine("\n");
-                count++;
-            }
         }
 
         public ItemUseResult UseItem(Item item, Player player)
@@ -100,7 +62,6 @@ namespace MiniRPG.Inventories
                 items.Remove(item);
 
             return result;
-
         }
     }
 }
