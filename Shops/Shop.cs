@@ -1,6 +1,7 @@
 ﻿using MiniRPG.Characters;
 using MiniRPG.Enums;
 using MiniRPG.Items;
+using MiniRPG.Items.Equipments;
 using System;
 using System.Collections.Generic;
 using System.Linq;

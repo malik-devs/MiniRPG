@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniRPG.Equipment
+namespace MiniRPG.Enums
 {
     public enum EquipmentResult
     {
         Success,
-        WeaponNotFound,
-        NotEquippedWeapon
+        NotFound,
+        NotEquipped
     }
    
 }

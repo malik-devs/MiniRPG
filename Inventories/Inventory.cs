@@ -1,6 +1,7 @@
 ﻿using MiniRPG.Characters;
 using MiniRPG.Enums;
 using MiniRPG.Items;
+using MiniRPG.Items.Equipments;
 using MiniRPG.UI;
 using System;
 using System.Collections.Generic;
@@ -71,7 +72,14 @@ namespace MiniRPG.Inventories
                     Console.WriteLine($"   Damage: +{weapon.Damage}");
                     Console.WriteLine(
                    $"{ConsoleUI.PrintBar(" Durability", weapon.Durability, weapon.MaxDurability)}"
-               );
+                    );
+                }
+                if (item is Armor armor)
+                {
+                    Console.WriteLine($"   Damage Reduction Percentage: %{armor.DamageReductionPercentage}");
+                    Console.WriteLine(
+                   $"{ConsoleUI.PrintBar(" Durability", armor.Durability, armor.MaxDurability)}"
+                    );
                 }
                 Console.WriteLine("\n");
                 count++;

@@ -6,6 +6,7 @@ using MiniRPG.Events;
 using MiniRPG.Items;
 using MiniRPG.SaveSystem;
 using MiniRPG.Shops;
+using MiniRPG.Items.Equipments;
 using System.Numerics;
 
 
@@ -169,6 +170,7 @@ namespace MiniRPG.GameLunch
             shop.AddItem(new Weapon("Iron Sword", 30, "A simple iron sword.", 10, 10));
             shop.AddItem(new Weapon("Steel Sword", 50, "A stronger sword.", 20, 20));
             shop.AddItem(new DefensePotion("Defense Potion", 25, "restores 5 Defense", 5));
+            shop.AddItem(new Armor("Iron Armor", 30, "A stronger armor.", 20, 10));
 
 
             return shop;
@@ -234,16 +236,37 @@ namespace MiniRPG.GameLunch
 
         private void PrintInventory(Player player)
         {
+            int avilable = 0;
             while (true)
             {
                 Console.Clear();
                 Console.WriteLine("================ INVENTORY ================");
                 player.Inventory.PrintItems();
+                if (player.EquippedWeapon != null)
+                {
+                    Console.WriteLine("-1. Unequip Weapon.");
+                    avilable--;
+                }
+                if (player.EquippedArmor != null)
+                {
+                    Console.WriteLine("-2. Unequip Armor.");
+                    avilable--;
+                }
                 Console.WriteLine("0. Exit\n");
                 Console.WriteLine("Enter your Choice to Use: ");
-                int choice = ReadChoice(0,player.Inventory.Count);
+                int choice = ReadChoice(avilable,player.Inventory.Count);
                 if (choice == 0)
                     break;
+                else if (choice == -1 && player.EquippedWeapon != null)
+                {
+                    player.Unequip(EquipmentType.Weapon);
+                    Console.WriteLine($"Unequipped Weapon");
+                }
+                else if (choice == -2 && player.EquippedArmor != null)
+                {
+                    player.Unequip(EquipmentType.Armor);
+                    Console.WriteLine($"Unequipped Armor");
+                }
                 else
                 {
                     Item? item = player.Inventory.GetItem(choice);

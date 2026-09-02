@@ -24,6 +24,8 @@ namespace MiniRPG.SaveSystem
         public List<ItemSaveData> InventoryItems { get; set; } = new List<ItemSaveData>();
 
         public ItemSaveData? EquippedWeapon { get; set; }
+        public ItemSaveData? EquippedArmor { get; set; }
+
 
     }
 }
