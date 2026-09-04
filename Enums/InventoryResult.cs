@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace MiniRPG.Enums
 {
-    public enum PurchaseResult
+    public enum InventoryResult
     {
-        Success, 
-        ItemNotFound,
-        NotEnoughGold,
-        LevelTooLow,
-        InventoryFull
+        Success,
+        Full
     }
 }

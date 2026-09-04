@@ -167,7 +167,7 @@ namespace MiniRPG.GameLaunch
             Shop shop = new Shop();
             shop.AddItem(new HealthPotion("Health Potion", 20, "Restores 50 HP", 50));
             shop.AddItem(new HealthPotion("Greater Health Potion", 40, "Restores 90 HP", 90));
-            shop.AddItem(new Weapon("Iron Sword", 30, "A simple iron sword.", 10, 10));
+            shop.AddItem(new Weapon("Iron Sword", 20, "A simple iron sword.", 10, 10));
             shop.AddItem(new Weapon("Steel Sword", 50, "A stronger sword.", 20, 20));
             shop.AddItem(new DefensePotion("Defense Potion", 25, "restores 5 Defense", 5));
             shop.AddItem(new Armor("Iron Armor", 30, "A stronger armor.", 20, 10));
@@ -223,6 +223,10 @@ namespace MiniRPG.GameLaunch
                             Console.WriteLine("Item is not available in the shop.");
                             break;
 
+                        case PurchaseResult.InventoryFull:
+                            Console.WriteLine("Inventory is full!");
+                            break;
+
                         case PurchaseResult.NotEnoughGold:
                             Console.WriteLine("Not enough Gold.");
                             break;
@@ -263,13 +267,43 @@ namespace MiniRPG.GameLaunch
                     break;
                 else if (choice == -1 && player.EquippedWeapon != null)
                 {
-                    player.Unequip(EquipmentType.Weapon);
-                    Console.WriteLine($"Unequipped Weapon");
+                    EquipmentResult result =
+                        player.Unequip(EquipmentType.Weapon);
+
+                    switch (result)
+                    {
+                        case EquipmentResult.Success:
+                            Console.WriteLine("Unequipped Weapon successfully.");
+                            break;
+
+                        case EquipmentResult.InventoryFull:
+                            Console.WriteLine("Inventory is full. Cannot unequip weapon.");
+                            break;
+
+                        case EquipmentResult.NotEquipped:
+                            Console.WriteLine("No weapon is equipped.");
+                            break;
+                    }
                 }
                 else if (choice == -2 && player.EquippedArmor != null)
                 {
-                    player.Unequip(EquipmentType.Armor);
-                    Console.WriteLine($"Unequipped Armor");
+                    EquipmentResult result =
+                        player.Unequip(EquipmentType.Armor);
+
+                    switch (result)
+                    {
+                        case EquipmentResult.Success:
+                            Console.WriteLine("Unequipped Armor successfully.");
+                            break;
+
+                        case EquipmentResult.InventoryFull:
+                            Console.WriteLine("Inventory is full. Cannot unequip armor.");
+                            break;
+
+                        case EquipmentResult.NotEquipped:
+                            Console.WriteLine("No armor is equipped.");
+                            break;
+                    }
                 }
                 else
                 {
