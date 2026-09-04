@@ -10,7 +10,9 @@ namespace MiniRPG.Enums
     {
         Success,
         NotFound,
-        NotEquipped
+        NotEquipped,
+        InventoryFull
+
     }
-   
+
 }

@@ -1,6 +1,5 @@
 ﻿using MiniRPG.Events;
 using MiniRPG.Inventories;
-using MiniRPG.UI;
 using MiniRPG.SaveSystem;
 using MiniRPG.Combat;
 using MiniRPG.Enums;
@@ -42,59 +41,6 @@ namespace MiniRPG.Characters
         public void Heal()
         {
             HP = MaxHP;
-        }
-
-        public void PrintStats()
-        {
-            Console.WriteLine("╔════════════════════════════════════╗");
-            Console.WriteLine("║           PLAYER STATS             ║");
-            Console.WriteLine("╚════════════════════════════════════╝\n");
-            Console.WriteLine($"Name: {Name}\n");
-            Console.WriteLine($"{ConsoleUI.PrintBar("HP", HP, MaxHP)}\n");
-            if (MaxDefense > 0)
-            {
-                Console.WriteLine(
-                    $"{ConsoleUI.PrintBar("Defense", Defense, MaxDefense)}\n");
-            }
-            Console.WriteLine($"Gold: {Gold}\n");
-            Console.WriteLine($"Level: {Level}\n");
-            Console.WriteLine($"{ConsoleUI.PrintBar("XP", XP, XpMax)}\n");
-            Console.WriteLine("======================================\n");
-            Console.WriteLine($"Base Damage: {Damage}\n");
-            
-
-            Console.Write("Weapon: ");
-
-            if (EquippedWeapon != null)
-            {
-                Console.WriteLine($"{EquippedWeapon.Name}\n");
-                Console.WriteLine($"Weapon Damage: +{EquippedWeapon.Damage}\n");
-                Console.WriteLine(
-                    $"{ConsoleUI.PrintBar(" Durability", EquippedWeapon.Durability, EquippedWeapon.MaxDurability)}\n"
-                );
-                Console.WriteLine($"Total Damage: {TotalDamage}\n");
-
-            }
-            else
-            {
-                Console.WriteLine("No Equipped Weapon");
-            }
-                Console.WriteLine("==============================\n");
-
-            if (EquippedArmor != null)
-            {
-                Console.WriteLine($"{EquippedArmor.Name}\n");
-                Console.WriteLine($"Armor Damage Reduction Percentage: %{EquippedArmor.DamageReductionPercentage}\n");
-                Console.WriteLine(
-                    $"{ConsoleUI.PrintBar(" Durability", EquippedArmor.Durability, EquippedArmor.MaxDurability)}\n"
-                );
-            }
-            else
-            {
-                Console.WriteLine("No Equipped Armor");
-            }
-
-            Console.WriteLine("==============================");
         }
 
         public void ReceiveReward(int xpReward, int goldReward)
@@ -161,7 +107,6 @@ namespace MiniRPG.Characters
                 EquippedWeapon.UseDurability();
                 if (EquippedWeapon.IsBroken)
                 {
-                    Console.WriteLine($"\nYour {EquippedWeapon.Name} broke!");
                     BreakWeapon();
                 }
             }
@@ -189,9 +134,6 @@ namespace MiniRPG.Characters
 
                 if (EquippedArmor.IsBroken)
                 {
-                    Console.WriteLine(
-                        $"\nYour {EquippedArmor.Name} broke!");
-
                     EquippedArmor = null;
                 }
             }
@@ -230,6 +172,7 @@ namespace MiniRPG.Characters
         {
             if (equipment == null)
                 throw new ArgumentNullException(nameof(equipment));
+
             if (!Inventory.Contains(equipment))
                 return EquipmentResult.NotFound;
 
@@ -237,23 +180,48 @@ namespace MiniRPG.Characters
             {
                 case EquipmentType.Weapon:
 
-                    if (EquippedWeapon != null)
-                        Inventory.AddItem(EquippedWeapon);
+                    EquipmentResult weaponResult =
+                        SwapEquipment(equipment, EquippedWeapon);
+
+                    if (weaponResult != EquipmentResult.Success)
+                        return weaponResult;
 
                     EquippedWeapon = (Weapon)equipment;
                     break;
 
+
                 case EquipmentType.Armor:
 
-                    if (EquippedArmor != null)
-                        Inventory.AddItem(EquippedArmor);
+                    EquipmentResult armorResult =
+                        SwapEquipment(equipment, EquippedArmor);
+
+                    if (armorResult != EquipmentResult.Success)
+                        return armorResult;
 
                     EquippedArmor = (Armor)equipment;
                     break;
             }
 
             return EquipmentResult.Success;
+        }
 
+        private EquipmentResult SwapEquipment(Equipment newEquipment,Equipment? oldEquipment)
+        {
+            Inventory.RemoveItem(newEquipment);
+
+            if (oldEquipment != null)
+            {
+                InventoryResult result =
+                    Inventory.AddItem(oldEquipment);
+
+                if (result != InventoryResult.Success)
+                {
+                    Inventory.AddItem(newEquipment);
+                    return EquipmentResult.InventoryFull;
+                }
+            }
+
+            return EquipmentResult.Success;
         }
         public EquipmentResult RestoreEquippedEquipment(Equipment equipment)
         {
@@ -282,9 +250,13 @@ namespace MiniRPG.Characters
                     if (EquippedWeapon == null)
                         return EquipmentResult.NotEquipped;
 
-                    Inventory.AddItem(EquippedWeapon);
-                    EquippedWeapon = null;
+                    InventoryResult weaponResult =
+                        Inventory.AddItem(EquippedWeapon);
 
+                    if (weaponResult != InventoryResult.Success)
+                        return EquipmentResult.InventoryFull;
+
+                    EquippedWeapon = null;
                     break;
 
                 case EquipmentType.Armor:
@@ -292,9 +264,13 @@ namespace MiniRPG.Characters
                     if (EquippedArmor == null)
                         return EquipmentResult.NotEquipped;
 
-                    Inventory.AddItem(EquippedArmor);
-                    EquippedArmor = null;
+                    InventoryResult armorResult =
+                        Inventory.AddItem(EquippedArmor);
 
+                    if (armorResult != InventoryResult.Success)
+                        return EquipmentResult.InventoryFull;
+
+                    EquippedArmor = null;
                     break;
             }
 

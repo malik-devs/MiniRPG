@@ -7,6 +7,7 @@ namespace MiniRPG.Items
     public class HealthPotion : Item
     {
         public int HealAmount { get; private set; }
+        public override bool IsStackable => true;
         public HealthPotion(string name, int price, string desc, int healAmount):base(name, price, desc)
         {
             HealAmount = healAmount;

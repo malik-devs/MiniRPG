@@ -4,13 +4,13 @@ using MiniRPG.Combat;
 using MiniRPG.Enums;
 using MiniRPG.Events;
 using MiniRPG.Items;
+using MiniRPG.Items.Equipments;
 using MiniRPG.SaveSystem;
 using MiniRPG.Shops;
-using MiniRPG.Items.Equipments;
-using System.Numerics;
+using MiniRPG.UI;
 
 
-namespace MiniRPG.GameLunch
+namespace MiniRPG.GameLaunch
 {
     public class Game
     {
@@ -167,7 +167,7 @@ namespace MiniRPG.GameLunch
             Shop shop = new Shop();
             shop.AddItem(new HealthPotion("Health Potion", 20, "Restores 50 HP", 50));
             shop.AddItem(new HealthPotion("Greater Health Potion", 40, "Restores 90 HP", 90));
-            shop.AddItem(new Weapon("Iron Sword", 30, "A simple iron sword.", 10, 10));
+            shop.AddItem(new Weapon("Iron Sword", 20, "A simple iron sword.", 10, 10));
             shop.AddItem(new Weapon("Steel Sword", 50, "A stronger sword.", 20, 20));
             shop.AddItem(new DefensePotion("Defense Potion", 25, "restores 5 Defense", 5));
             shop.AddItem(new Armor("Iron Armor", 30, "A stronger armor.", 20, 10));
@@ -179,7 +179,8 @@ namespace MiniRPG.GameLunch
         private void PlayerStats(Player player)
         {
             Console.Clear();
-            player.PrintStats();
+            PlayerUI playerUI = new PlayerUI();
+            playerUI.PrintStats(player);
             WaitForEnter();
 
         }
@@ -190,7 +191,8 @@ namespace MiniRPG.GameLunch
             {
                 Console.Clear();
                 Console.WriteLine("================  SHOP  ================");
-                shop.PrintItems();
+                ShopUI shopUI = new ShopUI();
+                shopUI.PrintItems(shop);
                 Console.WriteLine("0. Exit\n");
                 Console.WriteLine($"Gold: {player.Gold}\n");
                 Console.WriteLine("Enter Your Choice...");
@@ -221,6 +223,10 @@ namespace MiniRPG.GameLunch
                             Console.WriteLine("Item is not available in the shop.");
                             break;
 
+                        case PurchaseResult.InventoryFull:
+                            Console.WriteLine("Inventory is full!");
+                            break;
+
                         case PurchaseResult.NotEnoughGold:
                             Console.WriteLine("Not enough Gold.");
                             break;
@@ -241,7 +247,9 @@ namespace MiniRPG.GameLunch
             {
                 Console.Clear();
                 Console.WriteLine("================ INVENTORY ================");
-                player.Inventory.PrintItems();
+                InventoryUI inventoryUI = new InventoryUI();
+                inventoryUI.PrintItems(player.Inventory); 
+                
                 if (player.EquippedWeapon != null)
                 {
                     Console.WriteLine("-1. Unequip Weapon.");
@@ -259,13 +267,43 @@ namespace MiniRPG.GameLunch
                     break;
                 else if (choice == -1 && player.EquippedWeapon != null)
                 {
-                    player.Unequip(EquipmentType.Weapon);
-                    Console.WriteLine($"Unequipped Weapon");
+                    EquipmentResult result =
+                        player.Unequip(EquipmentType.Weapon);
+
+                    switch (result)
+                    {
+                        case EquipmentResult.Success:
+                            Console.WriteLine("Unequipped Weapon successfully.");
+                            break;
+
+                        case EquipmentResult.InventoryFull:
+                            Console.WriteLine("Inventory is full. Cannot unequip weapon.");
+                            break;
+
+                        case EquipmentResult.NotEquipped:
+                            Console.WriteLine("No weapon is equipped.");
+                            break;
+                    }
                 }
                 else if (choice == -2 && player.EquippedArmor != null)
                 {
-                    player.Unequip(EquipmentType.Armor);
-                    Console.WriteLine($"Unequipped Armor");
+                    EquipmentResult result =
+                        player.Unequip(EquipmentType.Armor);
+
+                    switch (result)
+                    {
+                        case EquipmentResult.Success:
+                            Console.WriteLine("Unequipped Armor successfully.");
+                            break;
+
+                        case EquipmentResult.InventoryFull:
+                            Console.WriteLine("Inventory is full. Cannot unequip armor.");
+                            break;
+
+                        case EquipmentResult.NotEquipped:
+                            Console.WriteLine("No armor is equipped.");
+                            break;
+                    }
                 }
                 else
                 {
@@ -301,8 +339,10 @@ namespace MiniRPG.GameLunch
             if (enemy == null)
                 return BattleResult.NoEnemy;
 
-            CombatSystem combat = new CombatSystem();
-            BattleResult result = combat.StartBattle(player, enemy);
+            CombatSystem combatSystem = new CombatSystem();
+            CombatUI combatUI = new CombatUI(combatSystem);
+
+            BattleResult result = combatUI.StartBattle(player, enemy);
 
 
             return result;

@@ -2,88 +2,111 @@
 using MiniRPG.Enums;
 using MiniRPG.Items;
 using MiniRPG.Items.Equipments;
-using MiniRPG.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MiniRPG.Inventories
 {
     public class Inventory
     {
-        private List<Item> items  = new List<Item>();
+        private List<InventoryItem> items = new List<InventoryItem>();
+        public int Capacity { get; private set; }
+        public bool IsFull => Count >= Capacity;
 
-        public IReadOnlyList<Item> Items => items;
+        public IReadOnlyList<InventoryItem> Items => items;
 
         public int Count => items.Count;
-        public void AddItem(Item item)
+
+        public Inventory(int capacity = 20)
         {
-            if(item !=  null)
-                items.Add(item);
+            if (capacity <= 0)
+                throw new ArgumentException("Capacity must be greater than zero.", nameof(capacity));
+
+            Capacity = capacity;
         }
 
-        public void RemoveItem(Item item)
+        public InventoryResult AddItem(Item item)
         {
-            if (item != null)
-                items.Remove(item);
+           return AddItem(item, 1);
+        }
+
+        public InventoryResult AddItem(Item item, int quantity)
+        {
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+
+            if (quantity <= 0)
+                throw new ArgumentException(
+                    "Quantity must be greater than zero.",
+                    nameof(quantity));
+
+            // محاولة الـ Stack أولًا
+            if (item.IsStackable)
+            {
+                InventoryItem? existingItem =
+                    items.FirstOrDefault(x =>
+                        x.Item.IsStackable &&
+                        x.Item.Name == item.Name);
+
+                if (existingItem != null)
+                {
+                    existingItem.AddQuantity(quantity);
+                    return InventoryResult.Success;
+                }
+            }
+
+            // يحتاج Slot جديد
+            if (IsFull)
+                return InventoryResult.Full;
+
+            items.Add(new InventoryItem(item, quantity));
+
+            return InventoryResult.Success;
+        }
+
+        public bool RemoveItem(Item item)
+        {
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+
+            InventoryItem? inventoryItem =
+                items.FirstOrDefault(x => x.Item == item);
+
+            if (inventoryItem == null)
+                return false;
+
+            if (inventoryItem.Quantity > 1)
+            {
+                inventoryItem.RemoveQuantity(1);
+            }
+            else
+            {
+                items.Remove(inventoryItem);
+            }
+
+            return true;
         }
 
         public bool Contains(Item item)
         {
-            return items.Contains(item);
-        }
+            if (item == null)
+                return false;
 
-        
+            return items.Any(x => x.Item == item);
+        }
 
         public Item? FindItem(string name)
         {
-            foreach (Item item in items)
-            {
-                if (item.Name == name)
-                    return item;
-            }
-            return null;
+            InventoryItem? inventoryItem =
+                items.FirstOrDefault(x => x.Item.Name == name);
+
+            return inventoryItem?.Item;
         }
+
         public Item? GetItem(int index)
         {
-            if (index <= 0 || index > items.Count) return null;
-            return items[index - 1];
-        }
+            if (index <= 0 || index > items.Count)
+                return null;
 
-        public void PrintItems()
-        {
-            if (items.Count == 0)
-            {
-                Console.WriteLine("Inventory is empty..");
-                return;
-            }
-            int count = 1;
-            foreach (Item item in items)
-            {
-                Console.WriteLine(
-                    $"{count}. Name: {item.Name}\n"+
-                    $"   Description: {item.Description}\n"
-                );
-
-                if (item is Weapon weapon)
-                {
-                    Console.WriteLine($"   Damage: +{weapon.Damage}");
-                    Console.WriteLine(
-                   $"{ConsoleUI.PrintBar(" Durability", weapon.Durability, weapon.MaxDurability)}"
-                    );
-                }
-                if (item is Armor armor)
-                {
-                    Console.WriteLine($"   Damage Reduction Percentage: %{armor.DamageReductionPercentage}");
-                    Console.WriteLine(
-                   $"{ConsoleUI.PrintBar(" Durability", armor.Durability, armor.MaxDurability)}"
-                    );
-                }
-                Console.WriteLine("\n");
-                count++;
-            }
+            return items[index - 1].Item;
         }
 
         public ItemUseResult UseItem(Item item, Player player)
@@ -91,16 +114,43 @@ namespace MiniRPG.Inventories
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
 
-            if (!items.Contains(item))
+            if (player == null)
+                throw new ArgumentNullException(nameof(player));
+
+            InventoryItem? inventoryItem =
+                items.FirstOrDefault(x => x.Item == item);
+
+            if (inventoryItem == null)
                 return ItemUseResult.Failed;
 
             ItemUseResult result = item.Use(player);
 
-            if (result == ItemUseResult.Success)
-                items.Remove(item);
+            if (result == ItemUseResult.Success && item is not Equipment) 
+            {
+                RemoveItem(item);
+            }
 
             return result;
-
         }
+        public bool CanAdd(Item item)
+        {
+            if (item == null)
+                return false;
+
+            // إذا كان Stackable ويوجد Stack له، يمكن إضافته
+            if (item.IsStackable)
+            {
+                bool hasExistingStack = items.Any(x =>
+                    x.Item.IsStackable &&
+                    x.Item.Name == item.Name);
+
+                if (hasExistingStack)
+                    return true;
+            }
+
+            // يحتاج Slot جديد
+            return !IsFull;
+        }
+
     }
 }

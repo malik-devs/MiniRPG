@@ -1,20 +1,14 @@
 ﻿using MiniRPG.Characters;
 using MiniRPG.Enums;
 using MiniRPG.Items;
-using MiniRPG.Items.Equipments;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MiniRPG.Shops
 {
-    public class Shop 
+    public class Shop
     {
         private List<Item> items = new List<Item>();
-        public int Count => items.Count;
 
+        public int Count => items.Count;
 
         public void AddItem(Item item)
         {
@@ -28,59 +22,30 @@ namespace MiniRPG.Shops
                 items.Remove(item);
         }
 
-
-
-        public void PrintItems()
-        {
-            if (items.Count == 0)
-            {
-                Console.WriteLine("Shop is empty..");
-                return;
-            }
-            int count = 1;
-            
-            foreach (Item item in items)
-            {
-                Console.WriteLine(
-                    $"{count}. {item.Name}\n" +
-                    $"Price: {item.Price}\n" +
-                    $"Description: {item.Description}"
-                );
-
-                if(item is Weapon weapon)
-                {
-                    Console.WriteLine($"Damage:  +{weapon.Damage}");
-                    Console.WriteLine($"Durability: +{weapon.MaxDurability}");
-                }
-                Console.WriteLine("\n");
-
-                count++;
-            }
-        }
-        
         public Item? GetItem(int index)
         {
-            if(index <= 0 || index > items.Count) return null;
-            return items[index-1];
+            if (index <= 0 || index > items.Count)
+                return null;
+
+            return items[index - 1];
         }
 
         public PurchaseResult BuyItem(Player player, Item item)
         {
             if (!items.Contains(item))
-            {
                 return PurchaseResult.ItemNotFound;
-            }
 
             if (item is DefensePotion && player.Level < 3)
-            {
                 return PurchaseResult.LevelTooLow;
-            }
+
+            if (!player.Inventory.CanAdd(item))
+                return PurchaseResult.InventoryFull;
 
             if (!player.SpendGold(item.Price))
-            {
                 return PurchaseResult.NotEnoughGold;
-            }
+
             player.Inventory.AddItem(item.Clone());
+
             return PurchaseResult.Success;
         }
     }

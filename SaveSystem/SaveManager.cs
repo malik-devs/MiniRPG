@@ -1,7 +1,8 @@
 ﻿using MiniRPG.Characters;
-using System.Text.Json;
+using MiniRPG.Inventories;
 using MiniRPG.Items;
 using MiniRPG.Items.Equipments;
+using System.Text.Json;
 
 namespace MiniRPG.SaveSystem
 {
@@ -33,11 +34,14 @@ namespace MiniRPG.SaveSystem
             data.MaxDefense = player.MaxDefense;
 
             // حفظ عناصر الـ Inventory
-            foreach (Item item in player.Inventory.Items)
+            foreach (InventoryItem inventoryItem in player.Inventory.Items)
             {
-                ItemSaveData itemData = CreateItemSaveData(item);
+                InventoryItemSaveData inventoryItemData = new InventoryItemSaveData();
 
-                data.InventoryItems.Add(itemData);
+                inventoryItemData.Item = CreateItemSaveData(inventoryItem.Item);
+                inventoryItemData.Quantity = inventoryItem.Quantity;
+
+                data.InventoryItems.Add(inventoryItemData);
             }
             if (player.EquippedWeapon != null)
             {
@@ -60,8 +64,7 @@ namespace MiniRPG.SaveSystem
 
         public Player? Load()
         {
-            try
-            {
+            
                 //اذا لم يجد الملف لا يقرأ
                 if (!File.Exists(SaveFilePath)) return null;
 
@@ -80,13 +83,13 @@ namespace MiniRPG.SaveSystem
                 //انشاء كائن جديد واسناد اليه البيانات المحفوظة
                 Player player = new Player(data.Name);
                 player.RestoreState(data);
-                foreach (ItemSaveData itemData in data.InventoryItems)
+                foreach (InventoryItemSaveData inventoryItemData in data.InventoryItems)
                 {
-                    Item? item = CreateItem(itemData);
+                    Item? item = CreateItem(inventoryItemData.Item);
 
                     if (item != null)
                     {
-                        player.Inventory.AddItem(item);
+                        player.Inventory.AddItem(item,inventoryItemData.Quantity);
                     }
                 }
                 if (data.EquippedWeapon != null)
@@ -109,17 +112,7 @@ namespace MiniRPG.SaveSystem
                 }
 
                 return player;
-            }
-            catch (JsonException)
-            {
-                Console.WriteLine($"Exception is {nameof(JsonException)}");
-                return null;
-            }
-            catch (IOException)
-            {
-                Console.WriteLine($"Exception is {nameof(IOException)}");
-                return null;
-            }
+            
         }
 
         private ItemSaveData CreateItemSaveData(Item item)
