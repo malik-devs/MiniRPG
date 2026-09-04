@@ -2,7 +2,7 @@
 
 A small Console RPG game built with **C# and .NET 8**.
 
-MiniRPG is a learning project created to practice **Object-Oriented Programming (OOP)**, classes, inheritance, enums, collections, and organizing a C# project into multiple systems.
+MiniRPG is a personal learning project created to practice **Object-Oriented Programming (OOP)**, game systems, collections, events, file handling, and organizing a C# project into multiple systems.
 
 ## ✨ Features
 
@@ -10,14 +10,22 @@ MiniRPG is a learning project created to practice **Object-Oriented Programming 
 * ⚔️ Turn-based combat system
 * 👾 Multiple enemies with different levels and rewards
 * 📈 Player XP and leveling system
-* ❤️ Health system
+* ❤️ Health and Defense systems
 * 💰 Gold and rewards
 * 🎒 Inventory system
-* 🧪 Health Potions
+* 📦 Stackable items and item quantities
+* 🧪 Health and Defense Potions
+* ⚔️ Weapon and Armor equipment
+* 🛡️ Armor damage reduction
+* 🔧 Equipment durability system
+* 🔄 Equipment swapping and unequipping
 * 🏪 Shop system
 * 🧩 Enemy Factory
+* 💾 Save & Load system using JSON
 * 📊 Player statistics
+* 🎨 Organized console UI
 * 🗂️ Organized project structure
+* 🔔 Level-up events
 
 ## 🛠️ Technologies
 
@@ -26,6 +34,7 @@ MiniRPG is a learning project created to practice **Object-Oriented Programming 
 * **Object-Oriented Programming (OOP)**
 * **Visual Studio 2022**
 * **Git & GitHub**
+* **JSON**
 
 ## 🎮 How to Run
 
@@ -62,39 +71,55 @@ This project was mainly created to practice and understand:
 * Abstract classes
 * Inheritance
 * Encapsulation
+* Polymorphism
 * Enums
 * Lists and collections
 * Methods and properties
 * Constructors
 * Object relationships
 * Factory Pattern basics
+* Events and EventArgs
+* JSON serialization and deserialization
+* File handling
+* Inventory and item management
 * Separating game systems into different classes
-* Git and GitHub workflow
+* Separating UI from game logic
+* Basic refactoring
+* Git branches, commits, merging, and tags
+* GitHub project workflow
 
-## 🚀 Future Improvements
+The project is divided into separate systems to keep the code organized and easier to maintain.
 
-Some ideas for future versions:
+## 🚀 Future Ideas
+
+MiniRPG is considered complete as a learning project.
+
+Possible ideas that could be explored in a future version include:
 
 * [ ] More enemy types
-* [ ] More items and weapons
-* [ ] Equipment system
-* [ ] More player classes
-* [ ] Critical hits
-* [ ] Different combat abilities
-* [ ] Save & Load system
 * [ ] More areas and locations
+* [ ] Boss battles
+* [ ] Loot drops
 * [ ] Quests
-* [ ] Better console UI
-* [ ] More advanced game events
+* [ ] Skills and abilities
+* [ ] Critical hits
+* [ ] Player classes
+* [ ] More advanced combat mechanics
+
+These features are intentionally left as future ideas rather than part of the current project scope.
 
 ## 📌 Project Status
 
-**In Development**
+**Completed — Learning Project**
 
-The basic gameplay systems are currently implemented. More features may be added as I continue learning C#.
+MiniRPG has reached its current planned scope.
+
+The project was built primarily to practice C# and software development concepts through a small, playable RPG.
+
+**Current Version: `v1.2.0`**
 
 ## 👨‍💻 Author
 
-**Malik Maarof ===> malik-devs**
+**Malik Maarof — [malik-devs](https://github.com/malik-devs)**
 
 This project was created as a personal C# learning project.
